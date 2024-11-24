@@ -2,7 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { Github, Linkedin, Mail, ArrowUpRight, Smartphone, CheckSquare, ShoppingBag, Utensils, Code, Database, Layout, User, MapPin, Calendar, Phone } from "lucide-react";
 
-const TypingEffect = ({ words }) => {
+interface TypingEffectProps {
+  words: string[];
+}
+
+const TypingEffect = ({ words }: TypingEffectProps) => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -41,17 +45,36 @@ const TypingEffect = ({ words }) => {
   );
 };
 
-const getTechIcon = (tag) => {
-  const iconMap = {
+type IconMapType = {
+  "React Native": React.ReactNode;
+  Laravel: React.ReactNode;
+  Vite: React.ReactNode;
+  MySQL: React.ReactNode;
+};
+
+const getTechIcon = (tag: string): React.ReactNode => {
+  const iconMap: IconMapType = {
     "React Native": <Smartphone className="w-4 h-4" />,
     Laravel: <Code className="w-4 h-4" />,
     Vite: <Layout className="w-4 h-4" />,
     MySQL: <Database className="w-4 h-4" />,
   };
-  return iconMap[tag] || null;
+  return iconMap[tag as keyof IconMapType] || null;
 };
 
-const ProjectCard = ({ project, index }) => {
+interface Project {
+  title: string;
+  description: string;
+  tags: string[];
+  icon: React.ReactNode;
+}
+
+interface ProjectCardProps {
+  project: Project;
+  index: number;
+}
+
+const ProjectCard = ({ project, index }: ProjectCardProps) => {
   return (
     <div
       className="bg-gray-900 p-6 rounded-lg transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 hover:rotate-1 hover:bg-gray-800"
@@ -80,7 +103,6 @@ const ProjectCard = ({ project, index }) => {
 const PortfolioPage = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [isLoading, setIsLoading] = useState(true);
-  const [setIsVisible] = useState({});
 
   const roles = ["Full Stack Developer", "Web Developer", "Mobile Developer"];
 
@@ -116,10 +138,6 @@ const PortfolioPage = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setIsVisible((prev) => ({
-              ...prev,
-              [entry.target.id]: true,
-            }));
             setActiveSection(entry.target.id);
           }
         });
@@ -136,7 +154,7 @@ const PortfolioPage = () => {
     return () => observer.disconnect();
   }, []);
 
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
@@ -262,7 +280,7 @@ const PortfolioPage = () => {
           <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">Get in Touch</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="space-y-8 animate-slideInFromLeft">
-              <p className="text-gray-400 text-lg">Let's work together! Feel free to reach out for collaborations or just a friendly hello.</p>
+              <p className="text-gray-400 text-lg">Let&apos;s work together! Feel free to reach out for collaborations or just a friendly hello.</p>
               <div className="space-y-4">
                 {[
                   { icon: <Mail size={24} />, text: "rasya23darkness@gmail.com" },
