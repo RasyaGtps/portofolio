@@ -80,7 +80,7 @@ const ProjectCard = ({ project, index }) => {
 const PortfolioPage = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [isLoading, setIsLoading] = useState(true);
-  const [isVisible, setIsVisible] = useState({});
+  const [setIsVisible] = useState({});
 
   const roles = ["Full Stack Developer", "Web Developer", "Mobile Developer"];
 
@@ -184,7 +184,7 @@ const PortfolioPage = () => {
         <div className="max-w-6xl mx-auto px-6">
           <div className="space-y-6">
             <h1 className="text-6xl font-bold leading-tight animate-slideInFromLeft">
-              Hi, I'm <span className="text-purple-500 animate-bounce">Rasya</span>
+              Hi, I&apos;m <span className="text-purple-500 animate-bounce">Rasya</span>
               <br />
               <TypingEffect words={roles} />
             </h1>
@@ -240,26 +240,19 @@ const PortfolioPage = () => {
               </div>
             </div>
 
-    <div className="grid grid-cols-2 gap-6 animate-slideInFromRight">
-      {skills.map((skill, index) => (
-        <div
-          key={skill.name}
-          className="bg-gray-800 p-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:bg-gray-700"
-          style={{ animationDelay: `${index * 200}ms` }}
-        >
-          <div className="flex justify-between items-center mb-2">
-            <h4 className="text-xl font-bold">{skill.name}</h4>
-            <span className="text-purple-500">{skill.percentage}%</span>
-          </div>
-          <div className="w-full bg-gray-600 h-2 rounded-full overflow-hidden">
-            <div
-              className="bg-purple-500 h-full rounded-full animate-grow"
-              style={{ width: `${skill.percentage}%` }}
-            ></div>
-          </div>
-        </div>
-      ))}
-    </div>
+            <div className="grid grid-cols-2 gap-6 animate-slideInFromRight">
+              {skills.map((skill, index) => (
+                <div key={skill.name} className="bg-gray-800 p-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:bg-gray-700" style={{ animationDelay: `${index * 200}ms` }}>
+                  <div className="flex justify-between items-center mb-2">
+                    <h4 className="text-xl font-bold">{skill.name}</h4>
+                    <span className="text-purple-500">{skill.percentage}%</span>
+                  </div>
+                  <div className="w-full bg-gray-600 h-2 rounded-full overflow-hidden">
+                    <div className="bg-purple-500 h-full rounded-full animate-grow" style={{ width: `${skill.percentage}%` }}></div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
