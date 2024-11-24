@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Github, Linkedin, Mail, ArrowUpRight, Smartphone, CheckSquare, ShoppingBag, Utensils, Code, Database, Layout, User, MapPin, Calendar, Phone } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowUpRight, Smartphone, CheckSquare, ShoppingBag, Utensils, Code, Database, Layout, User, MapPin, Calendar, Phone, Download } from "lucide-react";
+import Image from "next/image";
 
 interface TypingEffectProps {
   words: string[];
@@ -99,10 +100,10 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
     </div>
   );
 };
-
-const PortfolioPage = () => {
+export default function PortfolioPage() {
   const [activeSection, setActiveSection] = useState("home");
   const [isLoading, setIsLoading] = useState(true);
+  const [certificates, setCertificates] = useState<{ filename: string; path: string; type: string }[]>([]);
 
   const roles = ["Full Stack Developer", "Web Developer", "Mobile Developer"];
 
@@ -149,6 +150,25 @@ const PortfolioPage = () => {
       observer.observe(section);
     });
 
+    const loadCertificates = async () => {
+      try {
+        const response = await fetch("/api/certificates");
+        const data = await response.json();
+
+        if (Array.isArray(data)) {
+          setCertificates(data);
+        } else {
+          console.error("Invalid certificate data:", data);
+          setCertificates([]);
+        }
+      } catch (error) {
+        console.error("Error loading certificates:", error);
+        setCertificates([]);
+      }
+    };
+
+    loadCertificates();
+
     setTimeout(() => setIsLoading(false), 2000);
 
     return () => observer.disconnect();
@@ -184,7 +204,7 @@ const PortfolioPage = () => {
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold hover:text-purple-500 transition-all duration-300 transform hover:scale-110">Rasya Rayhan</h1>
             <div className="flex gap-6">
-              {["home", "projects", "about", "contact"].map((section, index) => (
+              {["home", "projects", "certificates", "about", "contact"].map((section, index) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
@@ -196,8 +216,7 @@ const PortfolioPage = () => {
             </div>
           </div>
         </nav>
-      </header>
-
+      </header>{" "}
       <section id="home" className="min-h-screen flex items-center justify-center pt-20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="space-y-6">
@@ -222,7 +241,6 @@ const PortfolioPage = () => {
           </div>
         </div>
       </section>
-
       <section id="projects" className="min-h-screen py-20">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">Featured Projects</h2>
@@ -233,7 +251,34 @@ const PortfolioPage = () => {
           </div>
         </div>
       </section>
-
+      <section id="certificates" className="min-h-screen py-20">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">My Certificates</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {certificates.map((cert, index) => (
+              <div
+                key={index}
+                className="bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition-all duration-500 hover:scale-105"
+                style={{
+                  animationDelay: `${index * 200}ms`,
+                  opacity: 0,
+                  animation: `fadeIn 0.5s ease-out ${index * 200}ms forwards`,
+                }}>
+                <div className="relative w-full h-64">
+                  <Image src={cert.path} alt={cert.filename} layout="fill" objectFit="contain" className="bg-white p-4" />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold mb-2 truncate">{cert.filename}</h3>
+                  <button onClick={() => window.open(cert.path, "_blank")} className="w-full flex items-center justify-center gap-2 bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 transition-all duration-300">
+                    <Download size={16} />
+                    Download {cert.type.toUpperCase()}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
       <section id="about" className="min-h-screen py-20">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">About Me</h2>
@@ -274,7 +319,6 @@ const PortfolioPage = () => {
           </div>
         </div>
       </section>
-
       <section id="contact" className="min-h-screen py-20">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">Get in Touch</h2>
@@ -401,6 +445,4 @@ const PortfolioPage = () => {
       `}</style>
     </div>
   );
-};
-
-export default PortfolioPage;
+}
