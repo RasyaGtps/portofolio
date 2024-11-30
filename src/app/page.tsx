@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Github, Linkedin, Mail, ArrowUpRight, Smartphone, CheckSquare, ShoppingBag, Utensils, Code, Database, Layout, User, MapPin, Calendar, Phone, Download } from "lucide-react";
 import Image from "next/image";
+import ParticlesBackground from "../components/ParticlesBackground";
+import CursorTrail from "../components/CursorTrail";
 
 interface TypingEffectProps {
   words: string[];
@@ -199,6 +201,7 @@ export default function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      <CursorTrail />
       <header className="fixed top-0 w-full bg-black/50 backdrop-blur-md z-50 animate-slideDown">
         <nav className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
@@ -217,8 +220,9 @@ export default function PortfolioPage() {
           </div>
         </nav>
       </header>{" "}
-      <section id="home" className="min-h-screen flex items-center justify-center pt-20">
-        <div className="max-w-6xl mx-auto px-6">
+      <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative">
+        <ParticlesBackground />
+        <div className="max-w-6xl mx-auto px-6 relative z-10">
           <div className="space-y-6">
             <h1 className="text-6xl font-bold leading-tight animate-slideInFromLeft">
               Hi, I&apos;m <span className="text-purple-500 animate-bounce">Rasya</span>
