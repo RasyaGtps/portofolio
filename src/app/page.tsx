@@ -185,8 +185,8 @@ export default function PortfolioPage() {
   };
 
   const skills = [
-    { name: "Frontend", percentage: 50 },
-    { name: "Backend", percentage: 90 },
+    { name: "Frontend", percentage: 1 },
+    { name: "Backend", percentage: 10 },
     { name: "Mobile", percentage: 70 },
     { name: "Database", percentage: 78 },
   ];
@@ -201,7 +201,6 @@ export default function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      <CursorTrail />
       <header className="fixed top-0 w-full bg-black/50 backdrop-blur-md z-50 animate-slideDown">
         <nav className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
