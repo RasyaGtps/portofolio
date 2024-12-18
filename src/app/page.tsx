@@ -185,9 +185,9 @@ export default function PortfolioPage() {
   };
 
   const skills = [
-    { name: "Frontend", percentage: 1 },
-    { name: "Backend", percentage: 10 },
-    { name: "Mobile", percentage: 70 },
+    { name: "Frontend", percentage: 70},
+    { name: "Backend", percentage: 80 },
+    { name: "Mobile", percentage: 76 },
     { name: "Database", percentage: 78 },
   ];
 
