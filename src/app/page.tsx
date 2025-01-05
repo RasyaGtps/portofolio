@@ -4,6 +4,8 @@ import { Github, Linkedin, Mail, ArrowUpRight, Smartphone, CheckSquare, Shopping
 import Image from "next/image";
 import ParticlesBackground from "../components/ParticlesBackground";
 import CursorTrail from "../components/CursorTrail";
+import ContactSection from './ContactSection'
+
 
 interface TypingEffectProps {
   words: string[];
@@ -322,43 +324,7 @@ export default function PortfolioPage() {
           </div>
         </div>
       </section>
-      <section id="contact" className="min-h-screen py-20">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">Get in Touch</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="space-y-8 animate-slideInFromLeft">
-              <p className="text-gray-400 text-lg">Let&apos;s work together! Feel free to reach out for collaborations or just a friendly hello.</p>
-              <div className="space-y-4">
-                {[
-                  { icon: <Mail size={24} />, text: "rasya23darkness@gmail.com" },
-                  { icon: <Phone size={24} />, text: "+62 89515902666" },
-                  { icon: <MapPin size={24} />, text: "Jawa Timur, Indonesia" },
-                ].map((contact, index) => (
-                  <div key={index} className="flex items-center gap-4 text-gray-400 hover:text-purple-500 transition-all duration-300" style={{ animationDelay: `${index * 200}ms` }}>
-                    {contact.icon}
-                    <span>{contact.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <form className="space-y-6 animate-slideInFromRight">
-              <div className="space-y-2">
-                <label className="text-gray-400">Name</label>
-                <input type="text" className="w-full bg-gray-900 rounded-lg p-4 outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300" placeholder="Your name" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-gray-400">Email</label>
-                <input type="email" className="w-full bg-gray-900 rounded-lg p-4 outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300" placeholder="Your email" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-gray-400">Message</label>
-                <textarea className="w-full bg-gray-900 rounded-lg p-4 outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300 min-h-[150px]" placeholder="Your message"></textarea>
-              </div>
-              <button className="w-full bg-purple-500 text-white py-4 rounded-lg hover:bg-purple-600 transition-all duration-300 transform hover:scale-105">Send Message</button>
-            </form>
-          </div>
-        </div>
-      </section>
+      <ContactSection />
       <style jsx global>{`
         @keyframes slideInFromLeft {
           from {
