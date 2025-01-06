@@ -284,7 +284,7 @@ export default function PortfolioPage() {
           </div>
         </div>
       </section>
-      <section id="about" className="min-h-screen py-20">
+      <section id="about" className="min-h-screen py-20 md:py-60">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">About Me</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
