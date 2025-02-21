@@ -72,6 +72,8 @@ interface Project {
   description: string;
   tags: string[];
   icon: React.ReactNode;
+  image: string;
+  isMobile?: boolean;
 }
 
 interface ProjectCardProps {
@@ -88,6 +90,14 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
         opacity: 0,
         animation: `fadeIn 0.5s ease-out ${index * 200}ms forwards`,
       }}>
+      <div className={`relative w-full mb-6 overflow-hidden rounded-lg ${project.isMobile ? 'h-[400px]' : 'h-[225px]'}`}>
+        <Image 
+          src={project.image} 
+          alt={project.title}
+          fill
+          className={`object-contain transition-transform duration-300 hover:scale-110 ${project.isMobile ? 'object-contain' : 'object-cover'}`}
+        />
+      </div>
       <div className="flex items-center gap-3 mb-4">
         {project.icon}
         <h3 className="text-2xl font-bold">{project.title}</h3>
@@ -104,6 +114,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
     </div>
   );
 };
+
 export default function PortfolioPage() {
   const [activeSection, setActiveSection] = useState("home");
   const [isLoading, setIsLoading] = useState(true);
@@ -117,24 +128,22 @@ export default function PortfolioPage() {
       description: "An interactive mobile application showcasing diverse cultural heritage and traditions through an engaging user interface.",
       tags: ["React Native", "MySQL"],
       icon: <Smartphone size={24} className="text-purple-500" />,
+      image: "/projects/budaya.png",
+      isMobile: true
     },
     {
       title: "Todo List Manager",
       description: "A comprehensive task management system built with Laravel, helping users organize and track their development tasks efficiently.",
       tags: ["Laravel", "MySQL"],
       icon: <CheckSquare size={24} className="text-purple-500" />,
+      image: "/projects/todo.png"
     },
     {
       title: "Rayypedia Marketplace",
       description: "A modern e-commerce platform powered by Laravel and Vite, providing a seamless shopping experience.",
       tags: ["Laravel", "Vite", "MySQL"],
       icon: <ShoppingBag size={24} className="text-purple-500" />,
-    },
-    {
-      title: "Restaurant Management App",
-      description: "A full-featured restaurant management system built with Laravel, streamlining operations and order management.",
-      tags: ["Laravel", "MySQL"],
-      icon: <Utensils size={24} className="text-purple-500" />,
+      image: "/projects/rayypedia.png"
     },
   ];
 
@@ -187,10 +196,10 @@ export default function PortfolioPage() {
   };
 
   const skills = [
-    { name: "Frontend", percentage: 1 },
-    { name: "Backend", percentage: 10 },
+    { name: "Frontend", percentage: 40 },
+    { name: "Backend", percentage: 85 },
     { name: "Mobile", percentage: 70 },
-    { name: "Database", percentage: 78 },
+    { name: "Database", percentage: 80 },
   ];
 
   if (isLoading) {
@@ -208,7 +217,7 @@ export default function PortfolioPage() {
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold hover:text-purple-500 transition-all duration-300 transform hover:scale-110">Rasya Rayhan</h1>
             <div className="flex gap-6">
-              {["home", "projects", "certificates", "about", "contact"].map((section, index) => (
+              {["home", "about", "projects", "certificates", "contact"].map((section, index) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
@@ -236,55 +245,21 @@ export default function PortfolioPage() {
                 Contact Me <ArrowUpRight size={20} className="animate-bounce" />
               </button>
               <div className="flex gap-4">
-                {[Github, Linkedin, Mail].map((Icon, index) => (
-                  <a key={index} href="#" className="p-3 hover:bg-gray-800 rounded-full transition-all duration-300 transform hover:scale-110 hover:rotate-6" style={{ animationDelay: `${index * 100}ms` }}>
-                    <Icon size={24} className="animate-float" />
-                  </a>
-                ))}
+                <a href="https://github.com/RasyaGtps" target="_blank" rel="noopener noreferrer" className="p-3 hover:bg-gray-800 rounded-full transition-all duration-300 transform hover:scale-110 hover:rotate-6" style={{ animationDelay: '0ms' }}>
+                  <Github size={24} className="animate-float" />
+                </a>
+                <a href="https://id.linkedin.com/in/rasya-rayhan-saifullah-4494b7352" target="_blank" rel="noopener noreferrer" className="p-3 hover:bg-gray-800 rounded-full transition-all duration-300 transform hover:scale-110 hover:rotate-6" style={{ animationDelay: '100ms' }}>
+                  <Linkedin size={24} className="animate-float" />
+                </a>
+                <a href="mailto:rasya23darkness@gmail.com" className="p-3 hover:bg-gray-800 rounded-full transition-all duration-300 transform hover:scale-110 hover:rotate-6" style={{ animationDelay: '200ms' }}>
+                  <Mail size={24} className="animate-float" />
+                </a>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <section id="projects" className="min-h-screen py-20">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">Featured Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {projects.map((project, index) => (
-              <ProjectCard key={index} project={project} index={index} />
-            ))}
-          </div>
-        </div>
-      </section>
-      <section id="certificates" className="min-h-screen py-20">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">My Certificates</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {certificates.map((cert, index) => (
-              <div
-                key={index}
-                className="bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition-all duration-500 hover:scale-105"
-                style={{
-                  animationDelay: `${index * 200}ms`,
-                  opacity: 0,
-                  animation: `fadeIn 0.5s ease-out ${index * 200}ms forwards`,
-                }}>
-                <div className="relative w-full h-64">
-                  <Image src={cert.path} alt={cert.filename} layout="fill" objectFit="contain" className="bg-white p-4" />
-                </div>
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold mb-2 truncate">{cert.filename}</h3>
-                  <button onClick={() => window.open(cert.path, "_blank")} className="w-full flex items-center justify-center gap-2 bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 transition-all duration-300">
-                    <Download size={16} />
-                    Download {cert.type.toUpperCase()}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section id="about" className="min-h-screen py-20 md:py-60">
+      <section id="about" className="py-20">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">About Me</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -321,6 +296,44 @@ export default function PortfolioPage() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+      <section id="projects" className="py-20">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">Featured Projects</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {projects.map((project, index) => (
+              <ProjectCard key={index} project={project} index={index} />
+            ))}
+          </div>
+        </div>
+      </section>
+      <section id="certificates" className="min-h-screen py-20">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">My Certificates</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {certificates.map((cert, index) => (
+              <div
+                key={index}
+                className="bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition-all duration-500 hover:scale-105"
+                style={{
+                  animationDelay: `${index * 200}ms`,
+                  opacity: 0,
+                  animation: `fadeIn 0.5s ease-out ${index * 200}ms forwards`,
+                }}>
+                <div className="relative w-full h-64">
+                  <Image src={cert.path} alt={cert.filename} layout="fill" objectFit="contain" className="bg-white p-4" />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold mb-2 truncate">{cert.filename}</h3>
+                  <button onClick={() => window.open(cert.path, "_blank")} className="w-full flex items-center justify-center gap-2 bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 transition-all duration-300">
+                    <Download size={16} />
+                    Download {cert.type.toUpperCase()}
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
