@@ -1,36 +1,152 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+  <h1>🚀 My Professional Portfolio</h1>
+  <p>A modern, responsive portfolio website built with Next.js 14 and TailwindCSS</p>
+  
+  ![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)
+  ![TypeScript](https://img.shields.io/badge/TypeScript-4.9-blue?style=for-the-badge&logo=typescript)
+  ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.3-38B2AC?style=for-the-badge&logo=tailwind-css)
+  ![Vercel](https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel)
+</div>
 
-## Getting Started
+## ✨ Features
 
-First, run the development server:
+- 🎨 Modern and clean design
+- 📱 Fully responsive
+- 🌟 Smooth animations and transitions
+- 🎭 Interactive particle background
+- ⚡ Fast loading with Next.js
+- 📊 Real-time skill progress bars
+- 🖼️ Dynamic project showcase
+- 📜 Certificate display section
+- 📬 Contact form integration
+- 🔍 SEO optimized
 
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js 14
+- **Language:** TypeScript
+- **Styling:** TailwindCSS
+- **Animation:** Custom CSS animations
+- **Icons:** Lucide Icons
+- **Fonts:** Geist Font
+- **Analytics:** Vercel Analytics
+- **Deployment:** Vercel
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ 
+- npm/yarn/pnpm
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/portfolio.git
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+3. Create a `.env.local` file in the root directory and add your environment variables:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+4. Run the development server:
 ```bash
 npm run dev
 # or
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+├── public/
+│   ├── projects/    # Project images
+│   └── certificates/# Certificate files
+├── src/
+│   ├── app/
+│   │   ├── api/    # API routes
+│   │   ├── fonts/  # Custom fonts
+│   │   └── page.tsx# Main page
+│   ├── components/ # React components
+│   └── styles/     # Global styles
+└── package.json
+```
 
-## Learn More
+## 🎨 Customization
 
-To learn more about Next.js, take a look at the following resources:
+### Changing Content
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Update personal information in `src/app/page.tsx`:
+```typescript
+const roles = ["Your", "Roles", "Here"];
+const projects = [
+  {
+    title: "Your Project",
+    description: "Project description",
+    // ...
+  }
+];
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Modify skills in the skills array:
+```typescript
+const skills = [
+  { name: "Your Skill", percentage: 85 },
+  // ...
+];
+```
 
-## Deploy on Vercel
+### Styling
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Colors can be customized in `tailwind.config.js`
+- Animations can be modified in the global styles section
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📱 Responsive Design
+
+The portfolio is fully responsive with breakpoints for:
+- Mobile: < 640px
+- Tablet: 640px - 1024px
+- Desktop: > 1024px
+
+## 🚀 Deployment
+
+The easiest way to deploy is using [Vercel](https://vercel.com):
+
+1. Push your code to GitHub
+2. Import your repository to Vercel
+3. Add environment variables
+4. Deploy!
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📧 Contact
+
+For any questions or feedback, please reach out to [your@email.com](mailto:your@email.com)
+
+---
+
+<div align="center">
+  Made with ❤️ by Your Name
+</div>
