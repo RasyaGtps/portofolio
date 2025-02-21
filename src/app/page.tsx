@@ -5,6 +5,7 @@ import Image from "next/image";
 import ParticlesBackground from "../components/ParticlesBackground";
 import CursorTrail from "../components/CursorTrail";
 import ContactSection from './ContactSection'
+import { Commet } from "react-loading-indicators";
 
 
 interface TypingEffectProps {
@@ -156,7 +157,10 @@ export default function PortfolioPage() {
           }
         });
       },
-      { threshold: 0.3 }
+      { 
+        threshold: 0.2,
+        rootMargin: '-80px 0px -20% 0px'
+      }
     );
 
     document.querySelectorAll("section[id]").forEach((section) => {
@@ -184,14 +188,40 @@ export default function PortfolioPage() {
 
     setTimeout(() => setIsLoading(false), 2000);
 
-    return () => observer.disconnect();
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      
+      document.querySelectorAll("section[id]").forEach((section) => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionHeight = section.offsetHeight;
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+          setActiveSection(section.id);
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
       setActiveSection(sectionId);
+      
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
     }
   };
 
@@ -205,7 +235,10 @@ export default function PortfolioPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white text-4xl font-bold animate-pulse">Loading...</div>
+        <Commet 
+          color="#A855F7"
+          size="medium"
+        />
       </div>
     );
   }
@@ -215,13 +248,17 @@ export default function PortfolioPage() {
       <header className="fixed top-0 w-full bg-black/50 backdrop-blur-md z-50 animate-slideDown">
         <nav className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold hover:text-purple-500 transition-all duration-300 transform hover:scale-110">Rasya Rayhan</h1>
+            <h1 className="text-2xl font-bold hover:text-purple-500 hover:glow-purple transition-all duration-300 transform hover:scale-110">
+              Rasya Rayhan
+            </h1>
             <div className="flex gap-6">
               {["home", "about", "projects", "certificates", "contact"].map((section, index) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
-                  className={`capitalize hover:text-purple-500 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 ${activeSection === section ? "text-purple-500" : ""}`}
+                  className={`capitalize hover:text-purple-500 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1
+                    ${activeSection === section ? "text-purple-500 glow-purple" : ""}
+                  `}
                   style={{ animationDelay: `${index * 100}ms` }}>
                   {section}
                 </button>
@@ -423,6 +460,40 @@ export default function PortfolioPage() {
 
         .animate-blink {
           animation: blink 1s step-end infinite;
+        }
+
+        .glow-purple {
+          text-shadow: 0 0 10px rgba(168, 85, 247, 0.5),
+                       0 0 20px rgba(168, 85, 247, 0.3),
+                       0 0 30px rgba(168, 85, 247, 0.2);
+        }
+
+        .hover\:glow-purple:hover {
+          text-shadow: 0 0 10px rgba(168, 85, 247, 0.5),
+                       0 0 20px rgba(168, 85, 247, 0.3),
+                       0 0 30px rgba(168, 85, 247, 0.2);
+        }
+
+        @keyframes glowPulse {
+          0% {
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5),
+                         0 0 20px rgba(168, 85, 247, 0.3),
+                         0 0 30px rgba(168, 85, 247, 0.2);
+          }
+          50% {
+            text-shadow: 0 0 15px rgba(168, 85, 247, 0.6),
+                         0 0 25px rgba(168, 85, 247, 0.4),
+                         0 0 35px rgba(168, 85, 247, 0.3);
+          }
+          100% {
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5),
+                         0 0 20px rgba(168, 85, 247, 0.3),
+                         0 0 30px rgba(168, 85, 247, 0.2);
+          }
+        }
+
+        .glow-purple {
+          animation: glowPulse 2s infinite;
         }
       `}</style>
     </div>
