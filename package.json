@@ -9,9 +9,9 @@
     "install:legacy": "npm install --legacy-peer-deps"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.47.10",
     "@vercel/analytics": "^1.5.0",
     "lucide-react": "latest",
+    "mysql2": "^3.14.1",
     "next": "15.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",

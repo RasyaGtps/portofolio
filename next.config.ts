@@ -6,6 +6,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  images: {
+    domains: ['xsgames.co', 'upload.wikimedia.org', 'avatars.githubusercontent.com'],
+  },
 };
 
 module.exports = nextConfig;
