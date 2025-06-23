@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Github, Linkedin, Mail, ArrowUpRight, Smartphone, CheckSquare, ShoppingBag, Utensils, Code, Database, Layout, User, MapPin, Calendar, Phone, Download } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowUpRight, Smartphone, CheckSquare, ShoppingBag, Code, Database, Layout, User, MapPin, BookOpen, Rocket, Brain, School, Terminal, Globe, Braces, Server } from "lucide-react";
 import Image from "next/image";
 import ParticlesBackground from "../components/ParticlesBackground";
-import CursorTrail from "../components/CursorTrail";
 import ContactSection from './ContactSection'
 import { Commet } from "react-loading-indicators";
+import TechIcon from '@/components/TechIcon';
 
 
 interface TypingEffectProps {
@@ -119,14 +119,13 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
 export default function PortfolioPage() {
   const [activeSection, setActiveSection] = useState("home");
   const [isLoading, setIsLoading] = useState(true);
-  const [certificates, setCertificates] = useState<{ filename: string; path: string; type: string }[]>([]);
 
-  const roles = ["Full Stack Developer", "Web Developer", "Mobile Developer"];
+  const roles = ["Student Developer", "Web Developer", "Mobile Developer", "SMK Telkom Sidoarjo"];
 
   const projects = [
     {
       title: "Mobile Culture App",
-      description: "An interactive mobile application showcasing diverse cultural heritage and traditions through an engaging user interface.",
+      description: "Aplikasi mobile interaktif yang menampilkan keberagaman warisan budaya dan tradisi Indonesia melalui antarmuka yang menarik.",
       tags: ["React Native", "MySQL"],
       icon: <Smartphone size={24} className="text-purple-500" />,
       image: "/projects/budaya.png",
@@ -134,17 +133,40 @@ export default function PortfolioPage() {
     },
     {
       title: "Todo List Manager",
-      description: "A comprehensive task management system built with Laravel, helping users organize and track their development tasks efficiently.",
+      description: "Sistem manajemen tugas yang dibangun dengan Laravel, membantu pengguna mengorganisir dan melacak tugas pengembangan mereka secara efisien.",
       tags: ["Laravel", "MySQL"],
       icon: <CheckSquare size={24} className="text-purple-500" />,
       image: "/projects/todo.png"
     },
     {
       title: "Rayypedia Marketplace",
-      description: "A modern e-commerce platform powered by Laravel and Vite, providing a seamless shopping experience.",
+      description: "Platform e-commerce modern yang ditenagai oleh Laravel dan Vite, menyediakan pengalaman berbelanja yang mulus.",
       tags: ["Laravel", "Vite", "MySQL"],
       icon: <ShoppingBag size={24} className="text-purple-500" />,
       image: "/projects/rayypedia.png"
+    },
+  ];
+
+  const skills = [
+    { 
+      name: "Frontend", 
+      icon: <Braces className="w-6 h-6 text-purple-500" />,
+      tools: ["HTML", "CSS", "JavaScript", "React", "Next.js", "Tailwind CSS"]
+    },
+    { 
+      name: "Backend",
+      icon: <Server className="w-6 h-6 text-purple-500" />,
+      tools: ["PHP", "Laravel", "Node.js", "Express", "REST API"]
+    },
+    { 
+      name: "Mobile",
+      icon: <Smartphone className="w-6 h-6 text-purple-500" />,
+      tools: ["React Native", "Expo", "Android Studio"]
+    },
+    { 
+      name: "Database",
+      icon: <Database className="w-6 h-6 text-purple-500" />,
+      tools: ["MySQL", "PostgreSQL", "MongoDB", "Firebase"]
     },
   ];
 
@@ -167,33 +189,15 @@ export default function PortfolioPage() {
       observer.observe(section);
     });
 
-    const loadCertificates = async () => {
-      try {
-        const response = await fetch("/api/certificates");
-        const data = await response.json();
-
-        if (Array.isArray(data)) {
-          setCertificates(data);
-        } else {
-          console.error("Invalid certificate data:", data);
-          setCertificates([]);
-        }
-      } catch (error) {
-        console.error("Error loading certificates:", error);
-        setCertificates([]);
-      }
-    };
-
-    loadCertificates();
-
     setTimeout(() => setIsLoading(false), 2000);
 
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       
       document.querySelectorAll("section[id]").forEach((section) => {
-        const sectionTop = section.offsetTop - 100;
-        const sectionHeight = section.offsetHeight;
+        const rect = section.getBoundingClientRect();
+        const sectionTop = rect.top + window.pageYOffset - 100;
+        const sectionHeight = rect.height;
         
         if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
           setActiveSection(section.id);
@@ -225,275 +229,224 @@ export default function PortfolioPage() {
     }
   };
 
-  const skills = [
-    { name: "Frontend", percentage: 40 },
-    { name: "Backend", percentage: 85 },
-    { name: "Mobile", percentage: 70 },
-    { name: "Database", percentage: 80 },
-  ];
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <Commet 
-          color="#A855F7"
-          size="medium"
-        />
+        <Commet color="#A855F7" size="medium" />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      <ParticlesBackground />
+      
+      {/* Header */}
       <header className="fixed top-0 w-full bg-black/50 backdrop-blur-md z-50 animate-slideDown">
         <nav className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold hover:text-purple-500 hover:glow-purple transition-all duration-300 transform hover:scale-110">
-              Rasya Rayhan
+            <h1 className="text-2xl font-bold">
+              Rasya<span className="text-purple-500">.</span>
             </h1>
-            <div className="flex gap-6">
-              {["home", "about", "projects", "certificates", "contact"].map((section, index) => (
-                <button
-                  key={section}
-                  onClick={() => scrollToSection(section)}
-                  className={`capitalize hover:text-purple-500 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1
-                    ${activeSection === section ? "text-purple-500 glow-purple" : ""}
-                  `}
-                  style={{ animationDelay: `${index * 100}ms` }}>
-                  {section}
-                </button>
-              ))}
+            <div className="flex items-center gap-8">
+              <button
+                onClick={() => scrollToSection("home")}
+                className={`hover:text-purple-500 transition-colors ${
+                  activeSection === "home" ? "text-purple-500" : ""
+                }`}
+              >
+                Home
+              </button>
+              <button
+                onClick={() => scrollToSection("about")}
+                className={`hover:text-purple-500 transition-colors ${
+                  activeSection === "about" ? "text-purple-500" : ""
+                }`}
+              >
+                About
+              </button>
+              <button
+                onClick={() => scrollToSection("projects")}
+                className={`hover:text-purple-500 transition-colors ${
+                  activeSection === "projects" ? "text-purple-500" : ""
+                }`}
+              >
+                Projects
+              </button>
+              <button
+                onClick={() => scrollToSection("contact")}
+                className={`hover:text-purple-500 transition-colors ${
+                  activeSection === "contact" ? "text-purple-500" : ""
+                }`}
+              >
+                Contact
+              </button>
             </div>
           </div>
         </nav>
-      </header>{" "}
-      <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative">
-        <ParticlesBackground />
-        <div className="max-w-6xl mx-auto px-6 relative z-10">
-          <div className="space-y-6">
-            <h1 className="text-6xl font-bold leading-tight animate-slideInFromLeft">
-              Hi, I&apos;m <span className="text-purple-500 animate-bounce">Rasya</span>
-              <br />
-              <TypingEffect words={roles} />
-            </h1>
-            <p className="text-xl text-gray-400 max-w-2xl animate-slideInFromRight">Just ordinary programmer</p>
-            <div className="flex gap-4 animate-slideInFromBottom">
-              <button onClick={() => scrollToSection("contact")} className="px-6 py-3 bg-purple-500 rounded-full hover:bg-purple-600 transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 flex items-center gap-2">
-                Contact Me <ArrowUpRight size={20} className="animate-bounce" />
-              </button>
-              <div className="flex gap-4">
-                <a href="https://github.com/RasyaGtps" target="_blank" rel="noopener noreferrer" className="p-3 hover:bg-gray-800 rounded-full transition-all duration-300 transform hover:scale-110 hover:rotate-6" style={{ animationDelay: '0ms' }}>
-                  <Github size={24} className="animate-float" />
-                </a>
-                <a href="https://id.linkedin.com/in/rasya-rayhan-saifullah-4494b7352" target="_blank" rel="noopener noreferrer" className="p-3 hover:bg-gray-800 rounded-full transition-all duration-300 transform hover:scale-110 hover:rotate-6" style={{ animationDelay: '100ms' }}>
-                  <Linkedin size={24} className="animate-float" />
-                </a>
-                <a href="mailto:rasya23darkness@gmail.com" className="p-3 hover:bg-gray-800 rounded-full transition-all duration-300 transform hover:scale-110 hover:rotate-6" style={{ animationDelay: '200ms' }}>
-                  <Mail size={24} className="animate-float" />
-                </a>
+      </header>
+
+      {/* Hero Section */}
+      <section id="home" className="min-h-screen flex items-center justify-center relative pt-20">
+        <div className="max-w-6xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 animate-slideInFromLeft">
+            <div className="space-y-2">
+              <h1 className="text-5xl font-bold leading-tight">
+                Hi, I&apos;m Rasya 👋
+              </h1>
+              <h2 className="text-4xl font-bold text-purple-500">
+                <TypingEffect words={roles} />
+              </h2>
+            </div>
+            <p className="text-gray-400 text-lg">
+              Siswa SMK Telkom Sidoarjo yang passionate dalam pengembangan web dan mobile. 
+              Selalu bersemangat untuk belajar teknologi baru dan menciptakan solusi inovatif melalui kode.
+            </p>
+            <div className="flex items-center gap-4">
+              <a
+                href="https://github.com/RasyaGtps"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 bg-gray-800/50 backdrop-blur-sm rounded-xl hover:bg-purple-500/20 transition-all duration-300 group"
+              >
+                <Github className="w-6 h-6 group-hover:text-purple-500 transition-colors" />
+              </a>
+              <a
+                href="https://id.linkedin.com/in/rasya-rayhan-saifullah-4494b7352"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 bg-gray-800/50 backdrop-blur-sm rounded-xl hover:bg-purple-500/20 transition-all duration-300 group"
+              >
+                <Linkedin className="w-6 h-6 group-hover:text-purple-500 transition-colors" />
+              </a>
+              <a
+                href="mailto:rasya23darkness@gmail.com"
+                className="p-3 bg-gray-800/50 backdrop-blur-sm rounded-xl hover:bg-purple-500/20 transition-all duration-300 group"
+              >
+                <Mail className="w-6 h-6 group-hover:text-purple-500 transition-colors" />
+              </a>
+            </div>
+          </div>
+          <div className="relative h-[400px] animate-slideInFromRight perspective-1000">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-2xl transform rotate-6 scale-95"></div>
+            <div className="absolute inset-0 bg-gray-900/90 backdrop-blur-sm rounded-2xl transform -rotate-6 scale-95 hover:rotate-0 transition-all duration-500 border border-purple-500/20">
+              <div className="p-8 h-full flex flex-col justify-between">
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <User className="w-5 h-5 text-purple-500" />
+                      <span>Muhammad Rasya Rayhan Saifullah</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <MapPin className="w-5 h-5 text-purple-500" />
+                      <span>Jawa Timur, Indonesia</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <School className="w-5 h-5 text-purple-500" />
+                      <span>SMK Telkom Sidoarjo</span>
+                    </div>
+                  </div>
+                  <div className="pt-4 border-t border-purple-500/20">
+                    <h3 className="text-xl font-semibold mb-4 text-purple-500">Current Focus</h3>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 bg-purple-500/10 p-3 rounded-xl">
+                        <Terminal className="w-5 h-5 text-purple-500" />
+                        <span>Exploring New Technologies</span>
+                      </div>
+                      <div className="flex items-center gap-3 bg-purple-500/10 p-3 rounded-xl">
+                        <Globe className="w-5 h-5 text-purple-500" />
+                        <span>Building Web Applications</span>
+                      </div>
+                      <div className="flex items-center gap-3 bg-purple-500/10 p-3 rounded-xl">
+                        <Brain className="w-5 h-5 text-purple-500" />
+                        <span>Learning & Growing</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* About Section */}
       <section id="about" className="py-20">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">About Me</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">
+            About Me
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="space-y-6 animate-slideInFromLeft">
-              <div className="flex items-center gap-4">
-                <User size={24} className="text-purple-500" />
-                <h3 className="text-2xl font-bold">Who am I?</h3>
-              </div>
-              <p className="text-gray-400 leading-relaxed">
-                A passionate Full Stack Developer with expertise in web and mobile development. I love creating elegant solutions to complex problems and am constantly learning new technologies to stay at the forefront of development.
+              <p className="text-gray-400 text-lg leading-relaxed">
+                Saya adalah siswa SMK Telkom Sidoarjo yang memiliki passion dalam dunia pengembangan web dan mobile. 
+                Perjalanan saya dalam programming dimulai dari rasa penasaran tentang bagaimana teknologi bekerja, 
+                dan berkembang menjadi hasrat untuk menciptakan solusi digital yang inovatif.
               </p>
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-4">
-                  <MapPin className="text-purple-500" />
-                  <span>Based in Indonesia</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <Calendar className="text-purple-500" />
-                  <span>3+ Years of Experience</span>
+              <p className="text-gray-400 text-lg leading-relaxed">
+                Di luar jam sekolah, saya aktif mengembangkan diri dengan mempelajari teknologi baru, 
+                berkontribusi dalam proyek open-source, dan mengerjakan proyek-proyek personal yang 
+                menantang kemampuan dan kreativitas saya.
+              </p>
+              <div className="flex items-center gap-4 p-4 bg-purple-500/10 rounded-xl">
+                <School className="w-8 h-8 text-purple-500" />
+                <div>
+                  <h3 className="font-semibold">SMK Telkom Sidoarjo</h3>
+                  <p className="text-gray-400">Rekayasa Perangkat Lunak</p>
                 </div>
               </div>
             </div>
-
-            <div className="grid grid-cols-2 gap-6 animate-slideInFromRight">
-              {skills.map((skill, index) => (
-                <div key={skill.name} className="bg-gray-800 p-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:bg-gray-700" style={{ animationDelay: `${index * 200}ms` }}>
-                  <div className="flex justify-between items-center mb-2">
-                    <h4 className="text-xl font-bold">{skill.name}</h4>
-                    <span className="text-purple-500">{skill.percentage}%</span>
+            <div className="space-y-8 animate-slideInFromRight">
+              <h3 className="text-2xl font-semibold mb-6">Technical Skills</h3>
+              <div className="grid gap-6">
+                {skills.map((skill, index) => (
+                  <div 
+                    key={index} 
+                    className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-purple-500/10 hover:border-purple-500/30 transition-all duration-300"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      {skill.icon}
+                      <h4 className="text-xl font-medium">{skill.name}</h4>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {skill.tools.map((tool, toolIndex) => (
+                        <div
+                          key={toolIndex}
+                          className="flex items-center gap-2 px-3 py-1.5 bg-purple-500/10 rounded-lg text-sm text-purple-500 hover:bg-purple-500/20 transition-colors duration-300 cursor-default group"
+                        >
+                          <TechIcon name={tool} className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
+                          <span>{tool}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="w-full bg-gray-600 h-2 rounded-full overflow-hidden">
-                    <div className="bg-purple-500 h-full rounded-full animate-grow" style={{ width: `${skill.percentage}%` }}></div>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Projects Section */}
       <section id="projects" className="py-20">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">Featured Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">
+            My Projects
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project, index) => (
               <ProjectCard key={index} project={project} index={index} />
             ))}
           </div>
         </div>
       </section>
-      <section id="certificates" className="min-h-screen py-20">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">My Certificates</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {certificates.map((cert, index) => (
-              <div
-                key={index}
-                className="bg-gray-900 rounded-lg overflow-hidden shadow-lg transform transition-all duration-500 hover:scale-105"
-                style={{
-                  animationDelay: `${index * 200}ms`,
-                  opacity: 0,
-                  animation: `fadeIn 0.5s ease-out ${index * 200}ms forwards`,
-                }}>
-                <div className="relative w-full h-64">
-                  <Image src={cert.path} alt={cert.filename} layout="fill" objectFit="contain" className="bg-white p-4" />
-                </div>
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold mb-2 truncate">{cert.filename}</h3>
-                  <button onClick={() => window.open(cert.path, "_blank")} className="w-full flex items-center justify-center gap-2 bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 transition-all duration-300">
-                    <Download size={16} />
-                    Download {cert.type.toUpperCase()}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
+      {/* Contact Section */}
       <ContactSection />
+
       <style jsx global>{`
-        @keyframes slideInFromLeft {
-          from {
-            transform: translateX(-100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
-
-        @keyframes slideInFromRight {
-          from {
-            transform: translateX(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
-
-        @keyframes slideInFromBottom {
-          from {
-            transform: translateY(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateY(0);
-            opacity: 1;
-          }
-        }
-
-        @keyframes float {
-          0% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-          100% {
-            transform: translateY(0px);
-          }
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes blink {
-          0%,
-          100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0;
-          }
-        }
-
-        .animate-slideInFromLeft {
-          animation: slideInFromLeft 1s ease-out;
-        }
-
-        .animate-slideInFromRight {
-          animation: slideInFromRight 1s ease-out;
-        }
-
-        .animate-slideInFromBottom {
-          animation: slideInFromBottom 1s ease-out;
-        }
-
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-
-        .animate-blink {
-          animation: blink 1s step-end infinite;
-        }
-
-        .glow-purple {
-          text-shadow: 0 0 10px rgba(168, 85, 247, 0.5),
-                       0 0 20px rgba(168, 85, 247, 0.3),
-                       0 0 30px rgba(168, 85, 247, 0.2);
-        }
-
-        .hover\:glow-purple:hover {
-          text-shadow: 0 0 10px rgba(168, 85, 247, 0.5),
-                       0 0 20px rgba(168, 85, 247, 0.3),
-                       0 0 30px rgba(168, 85, 247, 0.2);
-        }
-
-        @keyframes glowPulse {
-          0% {
-            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5),
-                         0 0 20px rgba(168, 85, 247, 0.3),
-                         0 0 30px rgba(168, 85, 247, 0.2);
-          }
-          50% {
-            text-shadow: 0 0 15px rgba(168, 85, 247, 0.6),
-                         0 0 25px rgba(168, 85, 247, 0.4),
-                         0 0 35px rgba(168, 85, 247, 0.3);
-          }
-          100% {
-            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5),
-                         0 0 20px rgba(168, 85, 247, 0.3),
-                         0 0 30px rgba(168, 85, 247, 0.2);
-          }
-        }
-
-        .glow-purple {
-          animation: glowPulse 2s infinite;
+        .perspective-1000 {
+          perspective: 1000px;
         }
       `}</style>
     </div>
