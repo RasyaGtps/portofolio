@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Github, Linkedin, Mail, ArrowUpRight, Smartphone, CheckSquare, ShoppingBag, Code, Database, Layout, User, MapPin, BookOpen, Rocket, Brain, School, Terminal, Globe, Braces, Server } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowUpRight, Smartphone, CheckSquare, ShoppingBag, Code, Database, Layout, User, MapPin, BookOpen, Rocket, Brain, School, Terminal, Globe, Braces, Server, X } from "lucide-react";
 import Image from "next/image";
 import ParticlesBackground from "../components/ParticlesBackground";
 import ContactSection from './ContactSection'
@@ -116,9 +116,17 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
   );
 };
 
+interface Certificate {
+  filename: string;
+  path: string;
+  type: string;
+}
+
 export default function PortfolioPage() {
   const [activeSection, setActiveSection] = useState("home");
   const [isLoading, setIsLoading] = useState(true);
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);
 
   const roles = ["Student Developer", "Web Developer", "Mobile Developer", "SMK Telkom Sidoarjo"];
 
@@ -151,24 +159,60 @@ export default function PortfolioPage() {
     { 
       name: "Frontend", 
       icon: <Braces className="w-6 h-6 text-purple-500" />,
-      tools: ["HTML", "CSS", "JavaScript", "React", "Next.js", "Tailwind CSS"]
+      tools: [
+        { name: "HTML", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
+        { name: "CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" },
+        { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
+        { name: "React", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+        { name: "Next.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
+        { name: "Tailwind CSS", icon: "https://www.vectorlogo.zone/logos/tailwindcss/tailwindcss-icon.svg" }
+      ]
     },
     { 
       name: "Backend",
       icon: <Server className="w-6 h-6 text-purple-500" />,
-      tools: ["PHP", "Laravel", "Node.js", "Express", "REST API"]
+      tools: [
+        { name: "PHP", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" },
+        { name: "Laravel", icon: "https://www.vectorlogo.zone/logos/laravel/laravel-icon.svg" },
+        { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
+        { name: "Express", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
+        { name: "REST API", icon: "https://www.svgrepo.com/show/375531/api.svg" }
+      ]
     },
     { 
       name: "Mobile",
       icon: <Smartphone className="w-6 h-6 text-purple-500" />,
-      tools: ["React Native", "Expo", "Android Studio"]
+      tools: [
+        { name: "React Native", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+        { name: "Expo", icon: "https://www.vectorlogo.zone/logos/expoio/expoio-icon.svg" },
+        { name: "Android Studio", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-original.svg" }
+      ]
     },
     { 
       name: "Database",
       icon: <Database className="w-6 h-6 text-purple-500" />,
-      tools: ["MySQL", "PostgreSQL", "MongoDB", "Firebase"]
-    },
+      tools: [
+        { name: "MySQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" },
+        { name: "PostgreSQL", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" },
+        { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
+        { name: "Firebase", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" }
+      ]
+    }
   ];
+
+  useEffect(() => {
+    const fetchCertificates = async () => {
+      try {
+        const response = await fetch('/api/certificates');
+        const data = await response.json();
+        setCertificates(data);
+      } catch (error) {
+        console.error('Error fetching certificates:', error);
+      }
+    };
+
+    fetchCertificates();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -274,6 +318,14 @@ export default function PortfolioPage() {
                 Projects
               </button>
               <button
+                onClick={() => scrollToSection("certificates")}
+                className={`hover:text-purple-500 transition-colors ${
+                  activeSection === "certificates" ? "text-purple-500" : ""
+                }`}
+              >
+                Certificates
+              </button>
+              <button
                 onClick={() => scrollToSection("contact")}
                 className={`hover:text-purple-500 transition-colors ${
                   activeSection === "contact" ? "text-purple-500" : ""
@@ -288,17 +340,30 @@ export default function PortfolioPage() {
 
       {/* Hero Section */}
       <section id="home" className="min-h-screen flex items-center justify-center relative pt-20">
-        <div className="max-w-6xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6 animate-slideInFromLeft">
-            <div className="space-y-2">
-              <h1 className="text-5xl font-bold leading-tight">
-                Hi, I&apos;m Rasya 👋
+        <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-transparent" />
+        <div className="max-w-6xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative">
+          <div className="space-y-8 animate-slideInFromLeft">
+            <div className="space-y-4">
+              <div className="inline-block">
+                <span className="relative inline-flex items-center px-6 py-2 text-sm font-medium text-purple-500 bg-purple-500/10 rounded-full">
+                  <span className="absolute flex h-3 w-3 top-1/2 -translate-y-1/2 left-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
+                  </span>
+                  Available for Collaboration
+                </span>
+              </div>
+              <h1 className="text-6xl font-bold leading-tight bg-gradient-to-r from-white via-purple-200 to-purple-400 text-transparent bg-clip-text">
+                Hi, I&apos;m Rasya 
+                <span className="inline-block animate-wave origin-bottom-right">👋</span>
               </h1>
-              <h2 className="text-4xl font-bold text-purple-500">
-                <TypingEffect words={roles} />
+              <h2 className="text-4xl font-bold">
+                <span className="text-purple-500">
+                  <TypingEffect words={roles} />
+                </span>
               </h2>
             </div>
-            <p className="text-gray-400 text-lg">
+            <p className="text-gray-400 text-lg leading-relaxed backdrop-blur-sm bg-black/20 p-6 rounded-xl border border-purple-500/10 hover:border-purple-500/30 transition-all duration-300">
               Siswa SMK Telkom Sidoarjo yang passionate dalam pengembangan web dan mobile. 
               Selalu bersemangat untuk belajar teknologi baru dan menciptakan solusi inovatif melalui kode.
             </p>
@@ -307,59 +372,106 @@ export default function PortfolioPage() {
                 href="https://github.com/RasyaGtps"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-gray-800/50 backdrop-blur-sm rounded-xl hover:bg-purple-500/20 transition-all duration-300 group"
+                className="group relative px-6 py-3 font-semibold text-white transition-all duration-300 ease-in-out bg-purple-500 rounded-xl hover:bg-purple-600 hover:scale-105"
               >
-                <Github className="w-6 h-6 group-hover:text-purple-500 transition-colors" />
+                <span className="absolute bottom-0 left-0 h-full w-full bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 rounded-xl opacity-0 group-hover:opacity-50 transition-opacity duration-300 ease-in-out"></span>
+                <div className="relative flex items-center gap-2">
+                  <Github className="w-5 h-5" />
+                  <span>GitHub</span>
+                </div>
               </a>
               <a
                 href="https://id.linkedin.com/in/rasya-rayhan-saifullah-4494b7352"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-gray-800/50 backdrop-blur-sm rounded-xl hover:bg-purple-500/20 transition-all duration-300 group"
+                className="group relative px-6 py-3 font-semibold text-white transition-all duration-300 ease-in-out bg-[#0A66C2] rounded-xl hover:bg-[#0952a5] hover:scale-105"
               >
-                <Linkedin className="w-6 h-6 group-hover:text-purple-500 transition-colors" />
+                <span className="absolute bottom-0 left-0 h-full w-full bg-gradient-to-r from-[#0A66C2] via-[#0952a5] to-[#083d7a] rounded-xl opacity-0 group-hover:opacity-50 transition-opacity duration-300 ease-in-out"></span>
+                <div className="relative flex items-center gap-2">
+                  <Linkedin className="w-5 h-5" />
+                  <span>LinkedIn</span>
+                </div>
               </a>
               <a
                 href="mailto:rasya23darkness@gmail.com"
-                className="p-3 bg-gray-800/50 backdrop-blur-sm rounded-xl hover:bg-purple-500/20 transition-all duration-300 group"
+                className="group relative px-6 py-3 font-semibold text-white transition-all duration-300 ease-in-out bg-red-500 rounded-xl hover:bg-red-600 hover:scale-105"
               >
-                <Mail className="w-6 h-6 group-hover:text-purple-500 transition-colors" />
+                <span className="absolute bottom-0 left-0 h-full w-full bg-gradient-to-r from-red-500 via-red-600 to-red-700 rounded-xl opacity-0 group-hover:opacity-50 transition-opacity duration-300 ease-in-out"></span>
+                <div className="relative flex items-center gap-2">
+                  <Mail className="w-5 h-5" />
+                  <span>Email</span>
+                </div>
               </a>
             </div>
           </div>
-          <div className="relative h-[400px] animate-slideInFromRight perspective-1000">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-2xl transform rotate-6 scale-95"></div>
-            <div className="absolute inset-0 bg-gray-900/90 backdrop-blur-sm rounded-2xl transform -rotate-6 scale-95 hover:rotate-0 transition-all duration-500 border border-purple-500/20">
-              <div className="p-8 h-full flex flex-col justify-between">
+          <div className="relative h-[500px] animate-slideInFromRight perspective-1000">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-2xl transform rotate-6 scale-95 animate-pulse"></div>
+            <div className="absolute inset-0 bg-[#1a1a1a] backdrop-blur-sm rounded-2xl transform -rotate-6 scale-95 hover:rotate-0 transition-all duration-500 border border-purple-500/20 group hover:border-purple-500/40">
+              <div className="p-6 h-full flex flex-col">
+                {/* Header with dots */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex space-x-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  </div>
+                  <div className="text-sm text-gray-500">portfolio.tsx</div>
+                </div>
+
+                {/* Main Content */}
                 <div className="space-y-6">
+                  {/* Profile Info */}
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
-                      <User className="w-5 h-5 text-purple-500" />
-                      <span>Muhammad Rasya Rayhan Saifullah</span>
+                      <div className="bg-purple-900/30 p-2 rounded-lg">
+                        <User className="w-5 h-5 text-purple-400" />
+                      </div>
+                      <div>
+                        <h4 className="text-purple-400 font-medium">Name</h4>
+                        <p className="text-gray-400">Muhammad Rasya Rayhan Saifullah</p>
+                      </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <MapPin className="w-5 h-5 text-purple-500" />
-                      <span>Jawa Timur, Indonesia</span>
+                      <div className="bg-purple-900/30 p-2 rounded-lg">
+                        <MapPin className="w-5 h-5 text-purple-400" />
+                      </div>
+                      <div>
+                        <h4 className="text-purple-400 font-medium">Location</h4>
+                        <p className="text-gray-400">Jawa Timur, Indonesia</p>
+                      </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <School className="w-5 h-5 text-purple-500" />
-                      <span>SMK Telkom Sidoarjo</span>
+                      <div className="bg-purple-900/30 p-2 rounded-lg">
+                        <School className="w-5 h-5 text-purple-400" />
+                      </div>
+                      <div>
+                        <h4 className="text-purple-400 font-medium">Education</h4>
+                        <p className="text-gray-400">SMK Telkom Sidoarjo</p>
+                      </div>
                     </div>
                   </div>
-                  <div className="pt-4 border-t border-purple-500/20">
-                    <h3 className="text-xl font-semibold mb-4 text-purple-500">Current Focus</h3>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3 bg-purple-500/10 p-3 rounded-xl">
-                        <Terminal className="w-5 h-5 text-purple-500" />
-                        <span>Exploring New Technologies</span>
+
+                  {/* Current Focus */}
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-semibold text-purple-400 mb-3">Current Focus</h3>
+                    <div className="space-y-2.5">
+                      <div className="bg-purple-900/30 p-2.5 rounded-xl transform transition-all duration-300 hover:bg-purple-900/40">
+                        <div className="flex items-center gap-3">
+                          <Terminal className="w-5 h-5 text-purple-400" />
+                          <span className="text-gray-300">Exploring New Technologies</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3 bg-purple-500/10 p-3 rounded-xl">
-                        <Globe className="w-5 h-5 text-purple-500" />
-                        <span>Building Web Applications</span>
+                      <div className="bg-purple-900/30 p-2.5 rounded-xl transform transition-all duration-300 hover:bg-purple-900/40">
+                        <div className="flex items-center gap-3">
+                          <Globe className="w-5 h-5 text-purple-400" />
+                          <span className="text-gray-300">Building Web Applications</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3 bg-purple-500/10 p-3 rounded-xl">
-                        <Brain className="w-5 h-5 text-purple-500" />
-                        <span>Learning & Growing</span>
+                      <div className="bg-purple-900/30 p-2.5 rounded-xl transform transition-all duration-300 hover:bg-purple-900/40">
+                        <div className="flex items-center gap-3">
+                          <Brain className="w-5 h-5 text-purple-400" />
+                          <span className="text-gray-300">Learning & Growing</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -392,7 +504,7 @@ export default function PortfolioPage() {
                 <School className="w-8 h-8 text-purple-500" />
                 <div>
                   <h3 className="font-semibold">SMK Telkom Sidoarjo</h3>
-                  <p className="text-gray-400">Rekayasa Perangkat Lunak</p>
+                  <p className="text-gray-400">Sistem Informasi Jaringan dan Aplikasi</p>
                 </div>
               </div>
             </div>
@@ -408,14 +520,18 @@ export default function PortfolioPage() {
                       {skill.icon}
                       <h4 className="text-xl font-medium">{skill.name}</h4>
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-3">
                       {skill.tools.map((tool, toolIndex) => (
                         <div
                           key={toolIndex}
-                          className="flex items-center gap-2 px-3 py-1.5 bg-purple-500/10 rounded-lg text-sm text-purple-500 hover:bg-purple-500/20 transition-colors duration-300 cursor-default group"
+                          className="flex items-center gap-2 px-3 py-2 bg-purple-500/10 rounded-lg text-sm text-purple-500 hover:bg-purple-500/20 transition-colors duration-300 cursor-default group"
                         >
-                          <TechIcon name={tool} className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-                          <span>{tool}</span>
+                          <img 
+                            src={tool.icon} 
+                            alt={tool.name} 
+                            className="w-5 h-5 group-hover:scale-110 transition-transform duration-300"
+                          />
+                          <span>{tool.name}</span>
                         </div>
                       ))}
                     </div>
@@ -440,6 +556,60 @@ export default function PortfolioPage() {
           </div>
         </div>
       </section>
+
+      {/* Certificates Section */}
+      <section id="certificates" className="py-20">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">
+            My Certificates
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {certificates.map((certificate: Certificate, index: number) => (
+              <div
+                key={index}
+                className="bg-gray-900 p-6 rounded-lg transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 hover:rotate-1 hover:bg-gray-800 animate-fadeIn cursor-pointer"
+                style={{
+                  animationDelay: `${index * 200}ms`,
+                }}
+                onClick={() => setSelectedCertificate(certificate)}
+              >
+                <div className="relative w-full h-[225px] mb-6 overflow-hidden rounded-lg">
+                  <Image
+                    src={certificate.path}
+                    alt="Certificate"
+                    fill
+                    className="object-cover transition-transform duration-300 hover:scale-110"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Certificate Modal */}
+      {selectedCertificate && (
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedCertificate(null)}
+        >
+          <div className="relative w-full max-w-5xl h-[80vh] rounded-xl overflow-hidden">
+            <Image
+              src={selectedCertificate.path}
+              alt="Certificate"
+              fill
+              className="object-contain"
+              quality={100}
+            />
+            <button
+              className="absolute top-4 right-4 bg-purple-500 text-white p-2 rounded-full hover:bg-purple-600 transition-colors"
+              onClick={() => setSelectedCertificate(null)}
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Contact Section */}
       <ContactSection />

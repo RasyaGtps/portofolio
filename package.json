@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
+    "framer-motion": "^12.19.1",
     "lucide-react": "latest",
     "mysql2": "^3.14.1",
     "next": "15.0.3",
