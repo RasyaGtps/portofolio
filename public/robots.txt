@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: www.rasyarayhandev.my.id
+Host: https://www.rasyarayhandev.my.id
 
 # Sitemaps
-Sitemap: www.rasyarayhandev.my.id/sitemap.xml
+Sitemap: https://www.rasyarayhandev.my.id/sitemap.xml
