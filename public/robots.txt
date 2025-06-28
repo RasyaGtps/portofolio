@@ -1,9 +1,4 @@
-# *
 User-agent: *
-Allow: /
+Disallow:
 
-# Host
-Host: https://www.rasyarayhandev.my.id
-
-# Sitemaps
 Sitemap: https://www.rasyarayhandev.my.id/sitemap.xml
