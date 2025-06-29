@@ -353,9 +353,13 @@ export default function PortfolioPage() {
                   Available for Collaboration
                 </span>
               </div>
-              <h1 className="text-6xl font-bold leading-tight bg-gradient-to-r from-white via-purple-200 to-purple-400 text-transparent bg-clip-text">
-                Hi, I&apos;m Rasya 
-                <span className="inline-block animate-wave origin-bottom-right">👋</span>
+              <h1 className="text-6xl font-bold leading-tight flex items-center gap-2">
+                <span className="bg-gradient-to-r from-white via-purple-200 to-purple-400 text-transparent bg-clip-text">
+                  Hi, I&apos;m Rasya
+                </span>
+                <span className="inline-block animate-wave origin-[70%] text-white">
+                  👋
+                </span>
               </h1>
               <h2 className="text-4xl font-bold">
                 <span className="text-purple-500">
