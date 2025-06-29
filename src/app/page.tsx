@@ -6,6 +6,7 @@ import ParticlesBackground from "../components/ParticlesBackground";
 import ContactSection from './ContactSection'
 import { Commet } from "react-loading-indicators";
 import TechIcon from '@/components/TechIcon';
+import Link from "next/link";
 
 
 interface TypingEffectProps {
@@ -128,7 +129,7 @@ export default function PortfolioPage() {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);
 
-  const roles = ["Student Developer", "Web Developer", "Mobile Developer", "SMK Telkom Sidoarjo"];
+  const roles = ["Web Developer", "Mobile Developer", "SMK Telkom Sidoarjo"];
 
   const projects = [
     {
@@ -343,17 +344,12 @@ export default function PortfolioPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-transparent" />
         <div className="max-w-6xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative">
           <div className="space-y-8 animate-slideInFromLeft">
-            <div className="space-y-4">
-              <div className="inline-block">
-                <span className="relative inline-flex items-center px-6 py-2 text-sm font-medium text-purple-500 bg-purple-500/10 rounded-full">
-                  <span className="absolute flex h-3 w-3 top-1/2 -translate-y-1/2 left-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
-                  </span>
-                  Available for Collaboration
-                </span>
+            <div className="flex flex-col gap-4 md:gap-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/20 rounded-full w-fit">
+                <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+                <span className="text-sm md:text-base text-white">Available for Collaboration</span>
               </div>
-              <h1 className="text-6xl font-bold leading-tight flex items-center gap-2">
+              <h1 className="text-4xl md:text-6xl font-bold leading-tight flex items-center gap-2">
                 <span className="bg-gradient-to-r from-white via-purple-200 to-purple-400 text-transparent bg-clip-text">
                   Hi, I&apos;m Rasya
                 </span>
@@ -361,51 +357,39 @@ export default function PortfolioPage() {
                   👋
                 </span>
               </h1>
-              <h2 className="text-4xl font-bold">
-                <span className="text-purple-500">
+              <h2 className="text-2xl md:text-4xl font-bold">
+                <span className="text-purple-400">
                   <TypingEffect words={roles} />
                 </span>
               </h2>
-            </div>
-            <p className="text-gray-400 text-lg leading-relaxed backdrop-blur-sm bg-black/20 p-6 rounded-xl border border-purple-500/10 hover:border-purple-500/30 transition-all duration-300">
-              Siswa SMK Telkom Sidoarjo yang passionate dalam pengembangan web dan mobile. 
-              Selalu bersemangat untuk belajar teknologi baru dan menciptakan solusi inovatif melalui kode.
-            </p>
-            <div className="flex items-center gap-4">
-              <a
-                href="https://github.com/RasyaGtps"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative px-6 py-3 font-semibold text-white transition-all duration-300 ease-in-out bg-purple-500 rounded-xl hover:bg-purple-600 hover:scale-105"
-              >
-                <span className="absolute bottom-0 left-0 h-full w-full bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 rounded-xl opacity-0 group-hover:opacity-50 transition-opacity duration-300 ease-in-out"></span>
-                <div className="relative flex items-center gap-2">
-                  <Github className="w-5 h-5" />
+              <p className="text-base md:text-lg text-gray-200 max-w-xl">
+                Siswa SMK Telkom Sidoarjo yang passionate dalam pengembangan web dan mobile. Selalu bersemangat untuk belajar teknologi baru dan menciptakan solusi inovatif melalui kode.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="https://github.com/rasyarayhan"
+                  target="_blank"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 rounded-full transition-colors text-white"
+                >
+                  <Image src="/icons/github.svg" alt="GitHub" width={20} height={20} className="text-white" />
                   <span>GitHub</span>
-                </div>
-              </a>
-              <a
-                href="https://id.linkedin.com/in/rasya-rayhan-saifullah-4494b7352"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative px-6 py-3 font-semibold text-white transition-all duration-300 ease-in-out bg-[#0A66C2] rounded-xl hover:bg-[#0952a5] hover:scale-105"
-              >
-                <span className="absolute bottom-0 left-0 h-full w-full bg-gradient-to-r from-[#0A66C2] via-[#0952a5] to-[#083d7a] rounded-xl opacity-0 group-hover:opacity-50 transition-opacity duration-300 ease-in-out"></span>
-                <div className="relative flex items-center gap-2">
-                  <Linkedin className="w-5 h-5" />
+                </Link>
+                <Link
+                  href="https://linkedin.com/in/rasyarayhan"
+                  target="_blank"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-full transition-colors text-white"
+                >
+                  <Image src="/icons/linkedin.svg" alt="LinkedIn" width={20} height={20} className="text-white" />
                   <span>LinkedIn</span>
-                </div>
-              </a>
-              <a
-                href="mailto:rasya23darkness@gmail.com"
-                className="group relative px-6 py-3 font-semibold text-white transition-all duration-300 ease-in-out bg-red-500 rounded-xl hover:bg-red-600 hover:scale-105"
-              >
-                <span className="absolute bottom-0 left-0 h-full w-full bg-gradient-to-r from-red-500 via-red-600 to-red-700 rounded-xl opacity-0 group-hover:opacity-50 transition-opacity duration-300 ease-in-out"></span>
-                <div className="relative flex items-center gap-2">
-                  <Mail className="w-5 h-5" />
+                </Link>
+                <Link
+                  href="mailto:rasyarayhan@gmail.com"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 rounded-full transition-colors text-white"
+                >
+                  <Image src="/icons/email.svg" alt="Email" width={20} height={20} className="text-white" />
                   <span>Email</span>
-                </div>
-              </a>
+                </Link>
+              </div>
             </div>
           </div>
           <div className="relative h-[500px] animate-slideInFromRight perspective-1000">
