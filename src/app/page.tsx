@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Github, Linkedin, Mail, ArrowUpRight, Smartphone, CheckSquare, ShoppingBag, Code, Database, Layout, User, MapPin, BookOpen, Rocket, Brain, School, Terminal, Globe, Braces, Server, X } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowUpRight, Smartphone, CheckSquare, ShoppingBag, Code, Database, Layout, User, MapPin, BookOpen, Rocket, Brain, School, Terminal, Globe, Braces, Server, X, Menu } from "lucide-react";
 import Image from "next/image";
 import ParticlesBackground from "../components/ParticlesBackground";
 import ContactSection from './ContactSection'
@@ -128,6 +128,7 @@ export default function PortfolioPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const roles = ["Web Developer", "Mobile Developer", "SMK Telkom Sidoarjo"];
 
@@ -293,7 +294,9 @@ export default function PortfolioPage() {
             <h1 className="text-2xl font-bold">
               Rasya<span className="text-purple-500">.</span>
             </h1>
-            <div className="flex items-center gap-8">
+            
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center gap-8">
               <button
                 onClick={() => scrollToSection("home")}
                 className={`hover:text-purple-500 transition-colors ${
@@ -335,7 +338,101 @@ export default function PortfolioPage() {
                 Contact
               </button>
             </div>
+
+            {/* Mobile Menu Button */}
+            <button 
+              className="md:hidden text-white hover:text-purple-500 transition-colors"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <Menu size={24} />
+            </button>
           </div>
+
+          {/* Mobile Menu Sidebar */}
+          <div 
+            className={`fixed inset-y-0 left-0 w-64 bg-black/95 backdrop-blur-lg transform transition-transform duration-300 ease-in-out ${
+              isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+            } md:hidden z-50`}
+          >
+            <div className="p-6 space-y-4">
+              <div className="flex justify-between items-center mb-8">
+                <h1 className="text-2xl font-bold">
+                  Rasya<span className="text-purple-500">.</span>
+                </h1>
+                <button 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-white hover:text-purple-500 transition-colors"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <div className="flex flex-col gap-4">
+                <button
+                  onClick={() => {
+                    scrollToSection("home");
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`text-left hover:text-purple-500 transition-colors ${
+                    activeSection === "home" ? "text-purple-500" : ""
+                  }`}
+                >
+                  Home
+                </button>
+                <button
+                  onClick={() => {
+                    scrollToSection("about");
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`text-left hover:text-purple-500 transition-colors ${
+                    activeSection === "about" ? "text-purple-500" : ""
+                  }`}
+                >
+                  About
+                </button>
+                <button
+                  onClick={() => {
+                    scrollToSection("projects");
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`text-left hover:text-purple-500 transition-colors ${
+                    activeSection === "projects" ? "text-purple-500" : ""
+                  }`}
+                >
+                  Projects
+                </button>
+                <button
+                  onClick={() => {
+                    scrollToSection("certificates");
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`text-left hover:text-purple-500 transition-colors ${
+                    activeSection === "certificates" ? "text-purple-500" : ""
+                  }`}
+                >
+                  Certificates
+                </button>
+                <button
+                  onClick={() => {
+                    scrollToSection("contact");
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`text-left hover:text-purple-500 transition-colors ${
+                    activeSection === "contact" ? "text-purple-500" : ""
+                  }`}
+                >
+                  Contact
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Overlay for mobile menu */}
+          {isMobileMenuOpen && (
+            <div 
+              className="fixed inset-0 bg-black/50 md:hidden"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+          )}
         </nav>
       </header>
 
