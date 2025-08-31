@@ -29,6 +29,8 @@ import {
   ListTodo,
   Users,
   Recycle,
+  Layers,
+  AppWindow,
 } from "lucide-react";
 
 import Image from "next/image";
@@ -141,7 +143,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
 
   return (
     <div
-      className="bg-gray-900 p-6 rounded-lg transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 hover:rotate-1 hover:bg-gray-800 cursor-pointer"
+      className="bg-gray-900 p-6 rounded-lg transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 hover:rotate-1 hover:bg-gray-800 cursor-pointer h-full flex flex-col"
       style={{
         animationDelay: `${index * 200}ms`,
         opacity: 0,
@@ -149,7 +151,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
       }}
     >
       <div
-        className={`relative w-full mb-6 overflow-hidden rounded-lg ${
+        className={`relative w-full mb-6 overflow-hidden rounded-lg flex-shrink-0 ${
           project.isMobile ? "h-[400px]" : "h-[225px]"
         }`}
       >
@@ -162,36 +164,38 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
           }`}
         />
       </div>
-      <div className="flex items-center gap-3 mb-4">
-        {primaryIconSrc ? (
-          <div className="w-8 h-8 p-1 bg-purple-500/20 rounded-lg flex items-center justify-center">
-            <img
-              src={primaryIconSrc}
-              alt={project.primaryTech}
-              className="w-6 h-6"
-            />
-          </div>
-        ) : (
-          project.icon
-        )}
-        <h3 className="text-2xl font-bold">{project.title}</h3>
-      </div>
-      <p className="text-gray-400 mb-4">{project.description}</p>
-      <div className="flex flex-wrap gap-2">
-        {techs.map((tag: string, tagIndex: number) => {
-          const techIconSrc = getRealTechIcon(tag);
-          return (
-            <span
-              key={tagIndex}
-              className="px-3 py-1 bg-purple-500/20 text-purple-500 rounded-full text-sm transform transition-all duration-300 hover:scale-110 hover:bg-purple-500/30 flex items-center gap-2"
-            >
-              {techIconSrc && (
-                <img src={techIconSrc} alt={tag} className="w-4 h-4" />
-              )}
-              {tag}
-            </span>
-          );
-        })}
+      <div className="flex flex-col flex-grow">
+        <div className="flex items-center gap-3 mb-4">
+          {primaryIconSrc ? (
+            <div className="w-8 h-8 p-1 bg-purple-500/20 rounded-lg flex items-center justify-center">
+              <img
+                src={primaryIconSrc}
+                alt={project.primaryTech}
+                className="w-6 h-6"
+              />
+            </div>
+          ) : (
+            project.icon
+          )}
+          <h3 className="text-2xl font-bold">{project.title}</h3>
+        </div>
+        <p className="text-gray-400 mb-4 flex-grow">{project.description}</p>
+        <div className="flex flex-wrap gap-2">
+          {techs.map((tag: string, tagIndex: number) => {
+            const techIconSrc = getRealTechIcon(tag);
+            return (
+              <span
+                key={tagIndex}
+                className="px-3 py-1 bg-purple-500/20 text-purple-500 rounded-full text-sm transform transition-all duration-300 hover:scale-110 hover:bg-purple-500/30 flex items-center gap-2"
+              >
+                {techIconSrc && (
+                  <img src={techIconSrc} alt={tag} className="w-4 h-4" />
+                )}
+                {tag}
+              </span>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
@@ -211,6 +215,7 @@ export default function PortfolioPage() {
     useState<Certificate | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [projectFilter, setProjectFilter] = useState<"all" | "web" | "mobile">("all");
 
   const roles = ["Web Developer", "Mobile Developer", "SMK Telkom Sidoarjo"];
 
@@ -315,6 +320,10 @@ export default function PortfolioPage() {
         {
           name: "JavaScript",
           icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+        },
+        {
+          name: "TypeScript",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
         },
         {
           name: "React",
@@ -875,18 +884,61 @@ export default function PortfolioPage() {
       {/* Projects Section */}
       <section id="projects" className="py-20">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-12 animate-slideInFromLeft">
-            My Projects
-          </h2>
+          <div className="flex justify-between items-center mb-12">
+            <h2 className="text-4xl font-bold animate-slideInFromLeft">
+              My Projects
+            </h2>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setProjectFilter("all")}
+                className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-2 ${
+                  projectFilter === "all"
+                    ? "bg-purple-500 text-white"
+                    : "bg-purple-500/20 text-purple-500 hover:bg-purple-500/30"
+                }`}
+              >
+                <Layers className="w-4 h-4" />
+                All Projects
+              </button>
+              <button
+                onClick={() => setProjectFilter("web")}
+                className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-2 ${
+                  projectFilter === "web"
+                    ? "bg-purple-500 text-white"
+                    : "bg-purple-500/20 text-purple-500 hover:bg-purple-500/30"
+                }`}
+              >
+                <AppWindow className="w-4 h-4" />
+                Web Apps
+              </button>
+              <button
+                onClick={() => setProjectFilter("mobile")}
+                className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-2 ${
+                  projectFilter === "mobile"
+                    ? "bg-purple-500 text-white"
+                    : "bg-purple-500/20 text-purple-500 hover:bg-purple-500/30"
+                }`}
+              >
+                <Smartphone className="w-4 h-4" />
+                Mobile Apps
+              </button>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <div key={index} onClick={() => setSelectedProject(project)}>
-                <ProjectCard project={project} index={index} />
-              </div>
-            ))}
+            {projects
+              .filter(project => 
+                projectFilter === "all" ? true : 
+                projectFilter === "mobile" ? project.isMobile :
+                !project.isMobile
+              )
+              .map((project, index) => (
+                <div key={index} onClick={() => setSelectedProject(project)} className="h-full">
+                  <ProjectCard project={project} index={index} />
+                </div>
+              ))}
           </div>
         </div>
-      </section>
+</section>
 
       {/* Certificates Section */}
       <section id="certificates" className="py-20">
