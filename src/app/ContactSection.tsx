@@ -22,7 +22,7 @@ const ContactMessages = ({ messages }: { messages: Contact[] }) => {
   return (
     <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-purple-500/20 max-h-[350px] overflow-y-auto space-y-4 custom-scrollbar">
       {messages.length === 0 ? (
-        <div className="text-gray-500 text-center py-8">
+        <div className="text-gray-300 text-center py-8">
           <Mail className="w-12 h-12 mx-auto mb-4 opacity-50" />
           <p>Belum ada pesan.</p>
         </div>
@@ -37,10 +37,10 @@ const ContactMessages = ({ messages }: { messages: Contact[] }) => {
                 <User size={18} className="text-purple-500" />
               </div>
               <div>
-                <h4 className="font-semibold text-purple-500">{message.name}</h4>
-                <p className="text-xs text-gray-400">{message.email}</p>
+                <p className="font-semibold text-purple-300">{message.name}</p>
+                <p className="text-xs text-gray-300">{message.email}</p>
               </div>
-              <span className="ml-auto text-xs text-gray-500">
+              <span className="ml-auto text-xs text-gray-300">
                 {new Date(message.created_at).toLocaleDateString('id-ID', {
                   year: 'numeric',
                   month: 'long',
@@ -170,8 +170,8 @@ const ContactSection = () => {
           {/* Contact Info & Messages */}
           <div className="space-y-8">
             <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-purple-500/20 animate-slideInFromLeft">
-              <h3 className="text-2xl font-semibold mb-6 text-purple-500">Let&apos;s Connect!</h3>
-              <p className="text-gray-400 mb-8">
+              <h3 className="text-2xl font-semibold mb-6 text-purple-400">Let&apos;s Connect!</h3>
+              <p className="text-gray-300 mb-8">
                 Tertarik untuk berkolaborasi atau punya pertanyaan? Jangan ragu untuk menghubungi saya melalui:
               </p>
               <div className="space-y-6">
@@ -187,8 +187,8 @@ const ContactSection = () => {
                       {info.icon}
                     </div>
                     <div>
-                      <h4 className="font-medium text-purple-500">{info.label}</h4>
-                      <p className="text-gray-400">{info.value}</p>
+                      <p className="font-medium text-purple-300">{info.label}</p>
+                      <p className="text-gray-300">{info.value}</p>
                     </div>
                   </a>
                 ))}
@@ -196,7 +196,7 @@ const ContactSection = () => {
             </div>
             
             <div className="animate-slideInFromLeft">
-              <h3 className="text-2xl font-semibold mb-6 text-purple-500">Recent Messages</h3>
+              <h3 className="text-2xl font-semibold mb-6 text-purple-400">Recent Messages</h3>
               <ContactMessages messages={messages} />
             </div>
           </div>
@@ -206,7 +206,7 @@ const ContactSection = () => {
             onSubmit={handleSubmit}
             className="bg-gray-900/50 backdrop-blur-sm p-8 rounded-xl border border-purple-500/20 space-y-6 animate-slideInFromRight"
           >
-            <h3 className="text-2xl font-semibold mb-6 text-purple-500">Send Message</h3>
+            <h3 className="text-2xl font-semibold mb-6 text-purple-400">Send Message</h3>
             
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-300">Nama</label>
@@ -219,8 +219,9 @@ const ContactSection = () => {
                   required
                   className="w-full bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 pl-12 outline-none focus:ring-2 focus:ring-purple-500 border border-purple-500/10 hover:border-purple-500/30 transition-all duration-300"
                   placeholder="Masukkan nama anda"
+                  aria-label="Nama"
                 />
-                <User className="w-5 h-5 text-purple-500 absolute left-4 top-1/2 -translate-y-1/2" />
+                <User className="w-5 h-5 text-purple-500 absolute left-4 top-1/2 -translate-y-1/2" aria-hidden="true" />
               </div>
             </div>
 
@@ -235,8 +236,9 @@ const ContactSection = () => {
                   required
                   className="w-full bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 pl-12 outline-none focus:ring-2 focus:ring-purple-500 border border-purple-500/10 hover:border-purple-500/30 transition-all duration-300"
                   placeholder="Masukkan email anda"
+                  aria-label="Email"
                 />
-                <Mail className="w-5 h-5 text-purple-500 absolute left-4 top-1/2 -translate-y-1/2" />
+                <Mail className="w-5 h-5 text-purple-500 absolute left-4 top-1/2 -translate-y-1/2" aria-hidden="true" />
               </div>
             </div>
 
@@ -249,6 +251,7 @@ const ContactSection = () => {
                 required
                 className="w-full bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 outline-none focus:ring-2 focus:ring-purple-500 border border-purple-500/10 hover:border-purple-500/30 transition-all duration-300 min-h-[150px] resize-none"
                 placeholder="Tulis pesan anda disini..."
+                aria-label="Pesan"
               />
             </div>
 

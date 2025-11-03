@@ -167,10 +167,10 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
       <div className="flex flex-col flex-grow">
         <div className="flex items-center gap-3 mb-4">
           {primaryIconSrc ? (
-            <div className="w-8 h-8 p-1 bg-purple-500/20 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 p-1 bg-purple-500/30 rounded-lg flex items-center justify-center">
               <img
                 src={primaryIconSrc}
-                alt={project.primaryTech}
+                alt={`${project.primaryTech} technology icon`}
                 className="w-6 h-6"
               />
             </div>
@@ -186,10 +186,10 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
             return (
               <span
                 key={tagIndex}
-                className="px-3 py-1 bg-purple-500/20 text-purple-500 rounded-full text-sm transform transition-all duration-300 hover:scale-110 hover:bg-purple-500/30 flex items-center gap-2"
+                className="px-3 py-1 bg-purple-500/30 text-purple-300 rounded-full text-sm transform transition-all duration-300 hover:scale-110 hover:bg-purple-500/40 flex items-center gap-2"
               >
                 {techIconSrc && (
-                  <img src={techIconSrc} alt={tag} className="w-4 h-4" />
+                  <img src={techIconSrc} alt={`${tag} technology icon`} className="w-4 h-4" />
                 )}
                 {tag}
               </span>
@@ -552,6 +552,8 @@ export default function PortfolioPage() {
             <button
               className="md:hidden text-white hover:text-purple-500 transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Open mobile navigation menu"
+              aria-expanded={isMobileMenuOpen}
             >
               <Menu size={24} />
             </button>
@@ -571,6 +573,7 @@ export default function PortfolioPage() {
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="text-white hover:text-purple-500 transition-colors"
+                  aria-label="Close mobile navigation menu"
                 >
                   <X size={24} />
                 </button>
@@ -638,8 +641,16 @@ export default function PortfolioPage() {
           {/* Overlay for mobile menu */}
           {isMobileMenuOpen && (
             <div
-              className="fixed inset-0 bg-black/50 md:hidden"
+              className="fixed inset-0 bg-black/50 md:hidden z-40"
               onClick={() => setIsMobileMenuOpen(false)}
+              role="button"
+              tabIndex={0}
+              aria-label="Close mobile menu overlay"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  setIsMobileMenuOpen(false);
+                }
+              }}
             />
           )}
         </nav>
@@ -734,7 +745,7 @@ export default function PortfolioPage() {
                     <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
                   </div>
-                  <div className="text-sm text-gray-500">portfolio.tsx</div>
+                  <div className="text-sm text-gray-300">portfolio.tsx</div>
                 </div>
 
                 {/* Main Content */}
@@ -746,8 +757,8 @@ export default function PortfolioPage() {
                         <User className="w-5 h-5 text-purple-400" />
                       </div>
                       <div>
-                        <h4 className="text-purple-400 font-medium">Name</h4>
-                        <p className="text-gray-400">
+                        <h3 className="text-purple-300 font-medium">Name</h3>
+                        <p className="text-gray-300">
                           Muhammad Rasya Rayhan Saifullah
                         </p>
                       </div>
@@ -757,10 +768,10 @@ export default function PortfolioPage() {
                         <MapPin className="w-5 h-5 text-purple-400" />
                       </div>
                       <div>
-                        <h4 className="text-purple-400 font-medium">
+                        <h3 className="text-purple-300 font-medium">
                           Location
-                        </h4>
-                        <p className="text-gray-400">Jawa Timur, Indonesia</p>
+                        </h3>
+                        <p className="text-gray-300">Jawa Timur, Indonesia</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -768,10 +779,10 @@ export default function PortfolioPage() {
                         <School className="w-5 h-5 text-purple-400" />
                       </div>
                       <div>
-                        <h4 className="text-purple-400 font-medium">
+                        <h3 className="text-purple-300 font-medium">
                           Education
-                        </h4>
-                        <p className="text-gray-400">SMK Telkom Sidoarjo</p>
+                        </h3>
+                        <p className="text-gray-300">SMK Telkom Sidoarjo</p>
                       </div>
                     </div>
                   </div>
@@ -862,11 +873,11 @@ export default function PortfolioPage() {
                       {skill.tools.map((tool, toolIndex) => (
                         <div
                           key={toolIndex}
-                          className="flex items-center gap-2 px-3 py-2 bg-purple-500/10 rounded-lg text-sm text-purple-500 hover:bg-purple-500/20 transition-colors duration-300 cursor-default group"
+                          className="flex items-center gap-2 px-3 py-2 bg-purple-500/20 rounded-lg text-sm text-purple-300 hover:bg-purple-500/30 transition-colors duration-300 cursor-default group"
                         >
                           <img
                             src={tool.icon}
-                            alt={tool.name}
+                            alt={`${tool.name} technology icon`}
                             className="w-5 h-5 group-hover:scale-110 transition-transform duration-300"
                           />
                           <span>{tool.name}</span>
@@ -894,8 +905,10 @@ export default function PortfolioPage() {
                 className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-2 ${
                   projectFilter === "all"
                     ? "bg-purple-500 text-white"
-                    : "bg-purple-500/20 text-purple-500 hover:bg-purple-500/30"
+                    : "bg-purple-500/30 text-purple-300 hover:bg-purple-500/40"
                 }`}
+                aria-label="Show all projects"
+                aria-pressed={projectFilter === "all"}
               >
                 <Layers className="w-4 h-4" />
                 All Projects
@@ -905,8 +918,10 @@ export default function PortfolioPage() {
                 className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-2 ${
                   projectFilter === "web"
                     ? "bg-purple-500 text-white"
-                    : "bg-purple-500/20 text-purple-500 hover:bg-purple-500/30"
+                    : "bg-purple-500/30 text-purple-300 hover:bg-purple-500/40"
                 }`}
+                aria-label="Show web application projects"
+                aria-pressed={projectFilter === "web"}
               >
                 <AppWindow className="w-4 h-4" />
                 Web Apps
@@ -916,8 +931,10 @@ export default function PortfolioPage() {
                 className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-2 ${
                   projectFilter === "mobile"
                     ? "bg-purple-500 text-white"
-                    : "bg-purple-500/20 text-purple-500 hover:bg-purple-500/30"
+                    : "bg-purple-500/30 text-purple-300 hover:bg-purple-500/40"
                 }`}
+                aria-label="Show mobile application projects"
+                aria-pressed={projectFilter === "mobile"}
               >
                 <Smartphone className="w-4 h-4" />
                 Mobile Apps
@@ -959,7 +976,7 @@ export default function PortfolioPage() {
                 <div className="relative w-full h-[225px] mb-6 overflow-hidden rounded-lg">
                   <Image
                     src={certificate.path}
-                    alt="Certificate"
+                    alt={`Certificate thumbnail - ${certificate.filename}`}
                     fill
                     className="object-cover transition-transform duration-300 hover:scale-110"
                   />
@@ -979,7 +996,7 @@ export default function PortfolioPage() {
           <div className="relative w-full max-w-5xl h-[80vh] rounded-xl overflow-hidden">
             <Image
               src={selectedCertificate.path}
-              alt="Certificate"
+              alt={`Certificate - ${selectedCertificate.filename}`}
               fill
               className="object-contain"
               quality={100}
@@ -987,6 +1004,7 @@ export default function PortfolioPage() {
             <button
               className="absolute top-4 right-4 bg-purple-500 text-white p-2 rounded-full hover:bg-purple-600 transition-colors"
               onClick={() => setSelectedCertificate(null)}
+              aria-label="Close certificate preview"
             >
               <X className="w-6 h-6" />
             </button>
@@ -1045,12 +1063,12 @@ export default function PortfolioPage() {
                       return (
                         <span
                           key={tagIndex}
-                          className="px-4 py-2 bg-purple-500/20 text-purple-500 rounded-full text-sm transform transition-all duration-300 hover:scale-110 hover:bg-purple-500/30 flex items-center gap-2"
+                          className="px-4 py-2 bg-purple-500/30 text-purple-300 rounded-full text-sm transform transition-all duration-300 hover:scale-110 hover:bg-purple-500/40 flex items-center gap-2"
                         >
                           {techIconSrc && (
                             <img
                               src={techIconSrc}
-                              alt={tag}
+                              alt={`${tag} technology icon`}
                               className="w-4 h-4"
                             />
                           )}
@@ -1065,6 +1083,7 @@ export default function PortfolioPage() {
             <button
               className="absolute top-4 right-4 bg-purple-500 text-white p-2 rounded-full hover:bg-purple-600 transition-colors"
               onClick={() => setSelectedProject(null)}
+              aria-label="Close project details"
             >
               <X className="w-6 h-6" />
             </button>
