@@ -31,6 +31,8 @@ import {
   Recycle,
   Layers,
   AppWindow,
+  Filter,
+  ChevronDown,
 } from "lucide-react";
 
 import Image from "next/image";
@@ -39,6 +41,7 @@ import ContactSection from "./ContactSection";
 import { Commet } from "react-loading-indicators";
 import TechIcon from "@/components/TechIcon";
 import Link from "next/link";
+import { title } from "process";
 
 interface TypingEffectProps {
   words: string[];
@@ -127,6 +130,10 @@ const getRealTechIcon = (tech: string) => {
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg",
     "Tailwind CSS":
       "https://www.vectorlogo.zone/logos/tailwindcss/tailwindcss-icon.svg",
+    "Nest.js":
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-original.svg",
+    Redis:
+      "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg",
     PostgreSQL:
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
   };
@@ -216,6 +223,8 @@ export default function PortfolioPage() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [projectFilter, setProjectFilter] = useState<"all" | "web" | "mobile">("all");
+  const [techFilter, setTechFilter] = useState<string | null>(null);
+  const [showTechDropdown, setShowTechDropdown] = useState(false);
 
   const roles = ["Web Developer", "Mobile Developer", "SMK Telkom Sidoarjo"];
 
@@ -302,6 +311,14 @@ export default function PortfolioPage() {
     image: "/projects/lumbunghijau.jpg",
     primaryTech: "React Native"
   },
+  {
+    title: "Website School",
+    description: "Membangun website sekolah sebagai pusat informasi digital yang terstruktur, dengan fokus pada kejelasan konten, navigasi intuitif, dan tampilan modern. Website ini menghadirkan fitur Virtual Tour dan Trial Class DTP untuk memberikan pengalaman eksplorasi interaktif, sehingga calon siswa dan orang tua dapat memahami lingkungan, fasilitas, serta sistem pembelajaran Sekolah Telkom secara lebih menyeluruh sebelum mengambil keputusan",
+    tags: ["React", "Tailwind CSS", "Nest.js", "Redis"],
+    icon: <School size={24} className="text-purple-500" />,
+    image: "/projects/jhic.png",
+    primaryTech: "React"
+  }
 ];
 
   const skills = [
@@ -363,6 +380,10 @@ export default function PortfolioPage() {
           name: "REST API",
           icon: "https://www.svgrepo.com/show/375531/api.svg",
         },
+        {
+          name: "Nest.js",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-original.svg",
+        },
       ],
     },
     {
@@ -402,6 +423,10 @@ export default function PortfolioPage() {
         {
           name: "Firebase",
           icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
+        },
+        {
+          name: "Redis",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg",
         },
       ],
     },
@@ -895,11 +920,11 @@ export default function PortfolioPage() {
       {/* Projects Section */}
       <section id="projects" className="py-20">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="flex justify-between items-center mb-12">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6 mb-12">
             <h2 className="text-4xl font-bold animate-slideInFromLeft">
               My Projects
             </h2>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => setProjectFilter("all")}
                 className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-2 ${
@@ -939,15 +964,75 @@ export default function PortfolioPage() {
                 <Smartphone className="w-4 h-4" />
                 Mobile Apps
               </button>
+              
+              {/* Tech Stack Filter Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowTechDropdown(!showTechDropdown)}
+                  className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-2 ${
+                    techFilter
+                      ? "bg-purple-500 text-white"
+                      : "bg-purple-500/30 text-purple-300 hover:bg-purple-500/40"
+                  }`}
+                  aria-label="Filter by tech stack"
+                >
+                  <Filter className="w-4 h-4" />
+                  {techFilter || "Tech Stack"}
+                  <ChevronDown className={`w-4 h-4 transition-transform ${showTechDropdown ? "rotate-180" : ""}`} />
+                </button>
+                
+                {showTechDropdown && (
+                  <div className="absolute top-full mt-2 right-0 bg-gray-900 border border-purple-500/30 rounded-xl p-2 min-w-[180px] z-50">
+                    <button
+                      onClick={() => {
+                        setTechFilter(null);
+                        setShowTechDropdown(false);
+                      }}
+                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
+                        !techFilter ? "bg-purple-500/30 text-purple-300" : "text-gray-300 hover:bg-purple-500/20"
+                      }`}
+                    >
+                      All Tech
+                    </button>
+                    {Array.from(new Set(projects.flatMap(p => 
+                      typeof p.tags === "string" ? (p.tags as string).split(",").map((t: string) => t.trim()) : p.tags
+                    ))).sort().map((tech) => (
+                      <button
+                        key={tech}
+                        onClick={() => {
+                          setTechFilter(tech);
+                          setShowTechDropdown(false);
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center gap-2 ${
+                          techFilter === tech ? "bg-purple-500/30 text-purple-300" : "text-gray-300 hover:bg-purple-500/20"
+                        }`}
+                      >
+                        {getRealTechIcon(tech) && (
+                          <img src={getRealTechIcon(tech)!} alt={tech} className="w-4 h-4" />
+                        )}
+                        {tech}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects
-              .filter(project => 
-                projectFilter === "all" ? true : 
-                projectFilter === "mobile" ? project.isMobile :
-                !project.isMobile
-              )
+              .filter(project => {
+                // Filter by type (all/web/mobile)
+                const typeMatch = projectFilter === "all" ? true : 
+                  projectFilter === "mobile" ? project.isMobile :
+                  !project.isMobile;
+                
+                // Filter by tech stack
+                if (!techFilter) return typeMatch;
+                const tags = typeof project.tags === "string" 
+                  ? (project.tags as string).split(",").map((t: string) => t.trim()) 
+                  : project.tags;
+                return typeMatch && tags.includes(techFilter);
+              })
               .map((project, index) => (
                 <div key={index} onClick={() => setSelectedProject(project)} className="h-full">
                   <ProjectCard project={project} index={index} />

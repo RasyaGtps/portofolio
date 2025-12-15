@@ -186,9 +186,9 @@ const ContactSection = () => {
                     <div className="bg-purple-500/20 p-3 rounded-lg group-hover:bg-purple-500/30 transition-colors">
                       {info.icon}
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="font-medium text-purple-300">{info.label}</p>
-                      <p className="text-gray-300">{info.value}</p>
+                      <p className="text-gray-300 break-all">{info.value}</p>
                     </div>
                   </a>
                 ))}
