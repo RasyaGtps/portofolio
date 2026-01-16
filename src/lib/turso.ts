@@ -55,6 +55,25 @@ export async function getContacts(): Promise<Contact[]> {
   return result.rows as unknown as Contact[];
 }
 
+export async function getContactsPaginated(page: number = 1, limit: number = 5): Promise<{ contacts: Contact[]; total: number; totalPages: number }> {
+  const offset = (page - 1) * limit;
+  
+  const countResult = await client.execute('SELECT COUNT(*) as total FROM contacts');
+  const total = (countResult.rows[0] as any).total;
+  const totalPages = Math.ceil(total / limit);
+  
+  const result = await client.execute({
+    sql: 'SELECT * FROM contacts ORDER BY created_at DESC LIMIT ? OFFSET ?',
+    args: [limit, offset]
+  });
+  
+  return {
+    contacts: result.rows as unknown as Contact[],
+    total,
+    totalPages
+  };
+}
+
 export async function addContact(name: string, email: string, message: string): Promise<Contact> {
   const result = await client.execute({
     sql: 'INSERT INTO contacts (name, email, message) VALUES (?, ?, ?) RETURNING *',

@@ -1,7 +1,7 @@
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
-export async function sendTelegramMessage(message: string) {
+export async function sendTelegramMessage(message: string, replyMarkup?: object) {
   if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
     console.warn('Telegram credentials not configured');
     return;
@@ -9,17 +9,66 @@ export async function sendTelegramMessage(message: string) {
 
   try {
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const body: any = {
+      chat_id: TELEGRAM_CHAT_ID,
+      text: message,
+      parse_mode: 'HTML'
+    };
+    
+    if (replyMarkup) {
+      body.reply_markup = replyMarkup;
+    }
+    
     await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message,
-        parse_mode: 'HTML'
-      })
+      body: JSON.stringify(body)
     });
   } catch (error) {
     console.error('Failed to send Telegram message:', error);
+  }
+}
+
+export async function editTelegramMessage(messageId: number, text: string, replyMarkup?: object) {
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+    return;
+  }
+
+  try {
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/editMessageText`;
+    const body: any = {
+      chat_id: TELEGRAM_CHAT_ID,
+      message_id: messageId,
+      text,
+      parse_mode: 'HTML'
+    };
+    
+    if (replyMarkup) {
+      body.reply_markup = replyMarkup;
+    }
+    
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  } catch (error) {
+    console.error('Failed to edit Telegram message:', error);
+  }
+}
+
+export async function answerCallbackQuery(callbackQueryId: string) {
+  if (!TELEGRAM_BOT_TOKEN) return;
+  
+  try {
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/answerCallbackQuery`;
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ callback_query_id: callbackQueryId })
+    });
+  } catch (error) {
+    console.error('Failed to answer callback query:', error);
   }
 }
 
