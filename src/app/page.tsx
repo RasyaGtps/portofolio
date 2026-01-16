@@ -400,6 +400,10 @@ export default function PortfolioPage() {
           icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
         },
         {
+          name: "Flutter",
+          icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg",
+        },
+        {
           name: "Expo",
           icon: "https://www.vectorlogo.zone/logos/expoio/expoio-icon.svg",
         },

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getContacts, addContact, initDB } from "@/lib/turso";
+import { notifyContact } from "@/lib/telegram";
 
 // Initialize database on first request
 let initialized = false;
@@ -48,6 +49,9 @@ export async function POST(request: NextRequest) {
     }
 
     const newContact = await addContact(name, email, message);
+
+    // Send Telegram notification
+    await notifyContact({ name, email, message });
 
     return NextResponse.json({ 
       success: true, 

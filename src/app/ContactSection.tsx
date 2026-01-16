@@ -143,8 +143,8 @@ const ContactSection = () => {
     { 
       icon: <Mail className="w-6 h-6" />,
       label: "Email",
-      value: "rasya23darkness@gmail.com",
-      link: "mailto:rasya23darkness@gmail.com"
+      value: "rasyarayhandev@gmail.com",
+      link: "mailto:rasyarayhandev@gmail.com"
     },
     { 
       icon: <Phone className="w-6 h-6" />,

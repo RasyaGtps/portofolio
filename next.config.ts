@@ -7,7 +7,20 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ['xsgames.co', 'upload.wikimedia.org', 'avatars.githubusercontent.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'xsgames.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'upload.wikimedia.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
+      },
+    ],
   },
 };
 

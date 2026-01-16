@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from 'react-hot-toast'
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/react"
+import VisitorTracker from "@/components/VisitorTracker"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -86,6 +87,7 @@ export default function RootLayout({
           }}
         />
         {children}
+        <VisitorTracker />
         <Analytics />
         <SpeedInsights />
       </body>
