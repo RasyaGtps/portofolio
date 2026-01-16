@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Github,
   Linkedin,
@@ -33,6 +33,8 @@ import {
   AppWindow,
   Filter,
   ChevronDown,
+  ArrowUp,
+  FolderX,
 } from "lucide-react";
 
 import Image from "next/image";
@@ -41,7 +43,6 @@ import ContactSection from "./ContactSection";
 import { Commet } from "react-loading-indicators";
 import TechIcon from "@/components/TechIcon";
 import Link from "next/link";
-import { title } from "process";
 
 interface TypingEffectProps {
   words: string[];
@@ -218,6 +219,7 @@ export default function PortfolioPage() {
   const [activeSection, setActiveSection] = useState("home");
   const [isLoading, setIsLoading] = useState(true);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [certificatesLoading, setCertificatesLoading] = useState(true);
   const [selectedCertificate, setSelectedCertificate] =
     useState<Certificate | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -225,6 +227,9 @@ export default function PortfolioPage() {
   const [projectFilter, setProjectFilter] = useState<"all" | "web" | "mobile">("all");
   const [techFilter, setTechFilter] = useState<string | null>(null);
   const [showTechDropdown, setShowTechDropdown] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  
+  const techDropdownRef = useRef<HTMLDivElement>(null);
 
   const roles = ["Web Developer", "Mobile Developer", "SMK Telkom Sidoarjo"];
 
@@ -434,16 +439,31 @@ export default function PortfolioPage() {
 
   useEffect(() => {
     const fetchCertificates = async () => {
+      setCertificatesLoading(true);
       try {
         const response = await fetch("/api/certificates");
         const data = await response.json();
         setCertificates(data);
       } catch (error) {
         console.error("Error fetching certificates:", error);
+      } finally {
+        setCertificatesLoading(false);
       }
     };
 
     fetchCertificates();
+  }, []);
+
+  // Close tech dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (techDropdownRef.current && !techDropdownRef.current.contains(event.target as Node)) {
+        setShowTechDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -469,6 +489,9 @@ export default function PortfolioPage() {
 
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
+      
+      // Show/hide scroll to top button
+      setShowScrollTop(scrollPosition > 400);
 
       document.querySelectorAll("section[id]").forEach((section) => {
         const rect = section.getBoundingClientRect();
@@ -966,7 +989,7 @@ export default function PortfolioPage() {
               </button>
               
               {/* Tech Stack Filter Dropdown */}
-              <div className="relative">
+              <div className="relative" ref={techDropdownRef}>
                 <button
                   onClick={() => setShowTechDropdown(!showTechDropdown)}
                   className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-2 ${
@@ -1019,8 +1042,8 @@ export default function PortfolioPage() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects
-              .filter(project => {
+            {(() => {
+              const filteredProjects = projects.filter(project => {
                 // Filter by type (all/web/mobile)
                 const typeMatch = projectFilter === "all" ? true : 
                   projectFilter === "mobile" ? project.isMobile :
@@ -1032,12 +1055,32 @@ export default function PortfolioPage() {
                   ? (project.tags as string).split(",").map((t: string) => t.trim()) 
                   : project.tags;
                 return typeMatch && tags.includes(techFilter);
-              })
-              .map((project, index) => (
+              });
+
+              if (filteredProjects.length === 0) {
+                return (
+                  <div className="col-span-full flex flex-col items-center justify-center py-16 text-gray-400">
+                    <FolderX className="w-16 h-16 mb-4 text-purple-500/50" />
+                    <p className="text-lg">Tidak ada project yang cocok dengan filter</p>
+                    <button
+                      onClick={() => {
+                        setProjectFilter("all");
+                        setTechFilter(null);
+                      }}
+                      className="mt-4 px-4 py-2 bg-purple-500/30 text-purple-300 rounded-full hover:bg-purple-500/40 transition-colors"
+                    >
+                      Reset Filter
+                    </button>
+                  </div>
+                );
+              }
+
+              return filteredProjects.map((project, index) => (
                 <div key={index} onClick={() => setSelectedProject(project)} className="h-full">
                   <ProjectCard project={project} index={index} />
                 </div>
-              ))}
+              ));
+            })()}
           </div>
         </div>
 </section>
@@ -1049,25 +1092,37 @@ export default function PortfolioPage() {
             My Certificates
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {certificates.map((certificate: Certificate, index: number) => (
-              <div
-                key={index}
-                className="bg-gray-900 p-6 rounded-lg transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 hover:rotate-1 hover:bg-gray-800 animate-fadeIn cursor-pointer"
-                style={{
-                  animationDelay: `${index * 200}ms`,
-                }}
-                onClick={() => setSelectedCertificate(certificate)}
-              >
-                <div className="relative w-full h-[225px] mb-6 overflow-hidden rounded-lg">
-                  <Image
-                    src={certificate.path}
-                    alt={`Certificate thumbnail - ${certificate.filename}`}
-                    fill
-                    className="object-cover transition-transform duration-300 hover:scale-110"
-                  />
+            {certificatesLoading ? (
+              // Skeleton loading
+              [...Array(6)].map((_, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-900 p-6 rounded-lg animate-pulse"
+                >
+                  <div className="w-full h-[225px] mb-6 bg-gray-800 rounded-lg" />
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              certificates.map((certificate: Certificate, index: number) => (
+                <div
+                  key={index}
+                  className="bg-gray-900 p-6 rounded-lg transform transition-all duration-500 hover:scale-105 hover:-translate-y-2 hover:rotate-1 hover:bg-gray-800 animate-fadeIn cursor-pointer"
+                  style={{
+                    animationDelay: `${index * 200}ms`,
+                  }}
+                  onClick={() => setSelectedCertificate(certificate)}
+                >
+                  <div className="relative w-full h-[225px] mb-6 overflow-hidden rounded-lg">
+                    <Image
+                      src={certificate.path}
+                      alt={`Certificate thumbnail - ${certificate.filename}`}
+                      fill
+                      className="object-cover transition-transform duration-300 hover:scale-110"
+                    />
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>
@@ -1178,6 +1233,17 @@ export default function PortfolioPage() {
 
       {/* Contact Section */}
       <ContactSection />
+
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-6 right-6 bg-purple-500 text-white p-3 rounded-full shadow-lg hover:bg-purple-600 transition-all duration-300 hover:scale-110 z-50"
+          aria-label="Scroll to top"
+        >
+          <ArrowUp className="w-5 h-5" />
+        </button>
+      )}
 
       <style jsx global>{`
         .perspective-1000 {
