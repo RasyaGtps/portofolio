@@ -62,7 +62,8 @@ const ContactSection = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    website: '' // Honeypot field
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -116,7 +117,7 @@ const ContactSection = () => {
 
       if (data.success && data.data) { // Pastikan data.data ada
         toast.success('Pesan berhasil dikirim!');
-        setFormData({ name: '', email: '', message: '' });
+        setFormData({ name: '', email: '', message: '', website: '' });
         // Tambahkan pesan yang baru ke daftar tanpa perlu load ulang semua
         setMessages(prevMessages => [data.data as Contact, ...prevMessages]);
       } else {
@@ -254,6 +255,18 @@ const ContactSection = () => {
                 aria-label="Pesan"
               />
             </div>
+
+            {/* Honeypot field - hidden from users, visible to bots */}
+            <input
+              type="text"
+              name="website"
+              value={formData.website}
+              onChange={handleChange}
+              className="absolute -left-[9999px] opacity-0 pointer-events-none"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+            />
 
             <button
               type="submit"
