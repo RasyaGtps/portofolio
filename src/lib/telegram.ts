@@ -16,14 +16,19 @@ export async function sendTelegramMessage(message: string, replyMarkup?: object)
     };
     
     if (replyMarkup) {
-      body.reply_markup = replyMarkup;
+      body.reply_markup = JSON.stringify(replyMarkup);
     }
     
-    await fetch(url, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
+    
+    const result = await response.json();
+    if (!result.ok) {
+      console.error('Telegram API error:', result);
+    }
   } catch (error) {
     console.error('Failed to send Telegram message:', error);
   }
@@ -44,14 +49,19 @@ export async function editTelegramMessage(messageId: number, text: string, reply
     };
     
     if (replyMarkup) {
-      body.reply_markup = replyMarkup;
+      body.reply_markup = JSON.stringify(replyMarkup);
     }
     
-    await fetch(url, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
+    
+    const result = await response.json();
+    if (!result.ok) {
+      console.error('Telegram edit error:', result);
+    }
   } catch (error) {
     console.error('Failed to edit Telegram message:', error);
   }
