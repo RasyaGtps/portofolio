@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { notifyVisitor } from "@/lib/telegram";
+import { addVisitor, initDB } from "@/lib/turso";
+
+let initialized = false;
 
 export async function POST(request: NextRequest) {
   try {
+    if (!initialized) {
+      await initDB();
+      initialized = true;
+    }
+
     const body = await request.json();
     
     // Get IP from headers
@@ -24,14 +32,20 @@ export async function POST(request: NextRequest) {
       // Ignore geo lookup errors
     }
 
-    await notifyVisitor({
+    const visitorData = {
       ip,
       country,
       city,
       device: body.device || "Unknown",
       browser: body.browser || "Unknown",
       page: body.page || "/"
-    });
+    };
+
+    // Save to database
+    await addVisitor(visitorData);
+
+    // Send Telegram notification
+    await notifyVisitor(visitorData);
 
     return NextResponse.json({ success: true });
   } catch (error) {
